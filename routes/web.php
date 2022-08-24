@@ -25,3 +25,5 @@ Auth::routes();
 
 Route::get('/profile/{user}/edit', ProfileController::class . '@edit')->name('profile.edit');
 Route::get('/profile/{user}', ProfileController::class . '@show')->name('profile.show');
+
+Route::get('/product/create', ProductController::class . '@create')->name('product.create');

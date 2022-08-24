@@ -13,7 +13,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        return view('home', [
+        return view('profile.index', [
             'user' => $user,
         ]);
     }
@@ -25,7 +25,7 @@ class ProfileController extends Controller
      */
     public function edit(User $user)
     {
-        return view('edit', [
+        return view('profile.edit', [
             'user' => $user,
         ]);
     }

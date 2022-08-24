@@ -15,8 +15,13 @@
                     <div>
                         <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
                     </div>
-                    <div>
-                        <a href="profile/{{$user->id}}/edit">Edit profile</a>
+                    <div class="d-flex">
+                        <div>
+                            <a href="profile/{{$user->id}}/edit">Edit profile</a>
+                        </div>
+                        <div>
+                            <a href="product/{{$user->id}}/edit">Add new product</a>
+                        </div>
                     </div>
                 </div>
             </div>
