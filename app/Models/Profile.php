@@ -5,6 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Profile
+ * @package App\Models
+ * 
+ * @property int $id
+ * @property int $user_id
+ * @property string $username
+ * @property string $introduction
+ * @property string $image
+ * @property dateTime $created_at
+ */
 class Profile extends Model
 {
     use HasFactory;
