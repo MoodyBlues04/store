@@ -10,10 +10,13 @@
                 </div>
                 <div class="col-9">
                     <div>
-                        <h1>{{ $user->username }}</h1>
+                        <h1>{{ $user->profile->username ?? "Enter username" }}</h1>
                     </div>
                     <div>
-                        <h4>Introduction</h4>
+                        <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
+                    </div>
+                    <div>
+                        <a href="profile/{{$user->id}}/edit">Edit profile</a>
                     </div>
                 </div>
             </div>

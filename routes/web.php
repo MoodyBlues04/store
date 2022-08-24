@@ -23,4 +23,5 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/profile/{user}/edit', ProfileController::class . '@edit')->name('profile.edit');
 Route::get('/profile/{user}', ProfileController::class . '@show')->name('profile.show');
