@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,5 +26,9 @@ Auth::routes();
 
 Route::get('/profile/{user}/edit', ProfileController::class . '@edit')->name('profile.edit');
 Route::get('/profile/{user}', ProfileController::class . '@show')->name('profile.show');
+Route::post('/profile', ProfileController::class . '@store')->name('profile.store');
+
 
 Route::get('/product/create', ProductController::class . '@create')->name('product.create');
+Route::post('/product', ProductController::class . '@store')->name('product.store');
+

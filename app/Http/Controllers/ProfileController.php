@@ -29,4 +29,35 @@ class ProfileController extends Controller
             'user' => $user,
         ]);
     }
+
+    /**
+     * Stores new product into the DB
+     */
+    public function store()
+    {
+        $data = request()->validate([
+            'username' => 'required',
+            'introduction' => 'required',
+            'image' => ['required', 'image'],
+        ]);
+
+        $imagePath = request('image')->store('images', 'public');
+
+        if (!isset(auth()->user()->profile)) {
+            auth()->user()->profile()->create([
+                'username' => $data['username'],
+                'introduction' => $data['introduction'],
+                'image' => $imagePath,
+            ]);
+        } else {
+            $profile = auth()->user()->profile;
+            $profile->username = $data['username'];
+            $profile->introduction = $data['introduction'];
+            $profile->image = $imagePath;
+            $profile->save();
+        }
+        
+
+        return redirect('/profile/' . auth()->user()->id);
+    }
 }

@@ -6,7 +6,16 @@
         <div class="col-8">
             <div class="row justify-content-center pt-4">
                 <div class="col-3">
-                    <img class="w-100 rounded-circle" src="{{ asset('storage') . '/images/cat.jpg' }}" alt="image.png">
+                    <img
+                        class="w-100 rounded-circle"
+                        src="/storage/<?php
+                            if (isset($user->profile->image)) {
+                                echo $user->profile->image;
+                            } else {
+                                echo 'images/default.jpg';
+                            }
+                        ?>"
+                        alt="image.png">
                 </div>
                 <div class="col-9">
                     <div>
@@ -15,12 +24,12 @@
                     <div>
                         <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex flex-column">
                         <div>
-                            <a href="profile/{{$user->id}}/edit">Edit profile</a>
+                            <a href="../profile/{{$user->id}}/edit">Edit profile</a>
                         </div>
                         <div>
-                            <a href="product/{{$user->id}}/edit">Add new product</a>
+                            <a href="../product/create">Add new product</a>
                         </div>
                     </div>
                 </div>
@@ -29,36 +38,23 @@
 
         <div class="col-8 mt-5">
             <div class="row justify-content-center">
-                <div class="col-4">
-                    <div class="card">
-                        <img class="card-img-top" style="height: 100px" src="{{ asset('storage') . '/images/cat.jpg' }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title m-0 p-0">Card title</h5>
-                            <p class="card-text m-0 p-0"><strong>price.</strong></p>
-                            <p class="card-text m-0 p-0">introduction.</p>
+                @if (isset($user->products))
+                    @foreach ($user->products as $product)
+                        <div class="col-4">
+                            <div class="card">
+                                <img class="card-img-top" style="height: 100px" src="/storage/{{$product->image}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title m-0 p-0">{{$product->name}}</h5>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="card-text m-0 p-0"><strong>{{$product->price}}p.</strong></p>
+                                        <p class="card-text m-0 p-0">{{$product->amount}}шт.</p>
+                                    </div>
+                                    <p class="card-text m-0 p-0">{{$product->description}}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="card">
-                        <img class="card-img-top" style="height: 100px" src="{{ asset('storage') . '/images/cat.jpg' }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title m-0 p-0">Card title</h5>
-                            <p class="card-text m-0 p-0"><strong>price.</strong></p>
-                            <p class="card-text m-0 p-0">introduction.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="card">
-                        <img class="card-img-top" style="height: 100px" src="{{ asset('storage') . '/images/cat.jpg' }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title m-0 p-0">Card title</h5>
-                            <p class="card-text m-0 p-0"><strong>price.</strong></p>
-                            <p class="card-text m-0 p-0">introduction.</p>
-                        </div>
-                    </div>
-                </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
