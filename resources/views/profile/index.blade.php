@@ -24,6 +24,9 @@
                     <div>
                         <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
                     </div>
+                    <div>
+                        <p>{{ (string)count($user->products) . ' товаров'}}</p>
+                    </div>
                     <div class="d-flex flex-column">
                         <div>
                             <a href="/profile/{{$user->id}}/edit">Edit profile</a>
@@ -40,7 +43,7 @@
             <div class="row justify-content-center">
                 @if (isset($user->products))
                     @foreach ($user->products as $product)
-                        <div class="col-4">
+                        <div class="col-4 pb-4">
                             <div class="card">
                                 <img class="card-img-top" style="height: 100px" src="/storage/{{$product->image}}" alt="Card image cap">
                                 <div class="card-body">
