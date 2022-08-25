@@ -26,10 +26,10 @@
                     </div>
                     <div class="d-flex flex-column">
                         <div>
-                            <a href="../profile/{{$user->id}}/edit">Edit profile</a>
+                            <a href="/profile/{{$user->id}}/edit">Edit profile</a>
                         </div>
                         <div>
-                            <a href="../product/create">Add new product</a>
+                            <a href="/product/create">Add new product</a>
                         </div>
                     </div>
                 </div>
