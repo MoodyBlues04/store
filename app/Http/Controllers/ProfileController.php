@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Intervention\Image\Facades\Image;
+
 
 class ProfileController extends Controller
 {
@@ -42,6 +44,9 @@ class ProfileController extends Controller
         ]);
 
         $imagePath = request('image')->store('images', 'public');
+
+        $image = Image::make(public_path('storage/' . $imagePath))->resize(200, 200);
+        $image->save();
 
         if (!isset(auth()->user()->profile)) {
             auth()->user()->profile()->create([

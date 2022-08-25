@@ -30,5 +30,6 @@ Route::post('/profile', ProfileController::class . '@store')->name('profile.stor
 
 
 Route::get('/product/create', ProductController::class . '@create')->name('product.create');
+Route::get('/product/{id}', ProductController::class . '@show')->name('product.show');
 Route::post('/product', ProductController::class . '@store')->name('product.store');
 

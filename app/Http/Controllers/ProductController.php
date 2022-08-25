@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -34,6 +35,9 @@ class ProductController extends Controller
         ]);
 
         $imagePath = request('image')->store('uploads', 'public');
+
+        $image = Image::make(public_path('storage/' . $imagePath))->resize(230, 140);
+        $image->save();
 
         auth()->user()->products()->create([
             'name' => $data['name'],

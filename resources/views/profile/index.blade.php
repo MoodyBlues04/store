@@ -44,17 +44,20 @@
                 @if (isset($user->products))
                     @foreach ($user->products as $product)
                         <div class="col-4 pb-4">
-                            <div class="card">
-                                <img class="card-img-top" style="height: 100px" src="/storage/{{$product->image}}" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title m-0 p-0">{{$product->name}}</h5>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="card-text m-0 p-0"><strong>{{$product->price}}p.</strong></p>
-                                        <p class="card-text m-0 p-0">{{$product->amount}}шт.</p>
+                            <a href="/product/{{$product->id}}" style="text-decoration:none; color:black">
+                                <div class="card">
+                                    <img class="card-img-top" src="/storage/{{$product->image}}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title m-0 p-0">{{$product->name}}</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <p class="card-text m-0 p-0"><strong>{{$product->price}}p.</strong></p>
+                                            <p class="card-text m-0 p-0">{{$product->amount}}шт.</p>
+                                        </div>
+                                        <p class="card-text m-0 p-0">{{$product->description}}</p>
                                     </div>
-                                    <p class="card-text m-0 p-0">{{$product->description}}</p>
                                 </div>
-                            </div>
+                            </a>
+                            
                         </div>
                     @endforeach
                 @endif
