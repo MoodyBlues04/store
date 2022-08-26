@@ -45,4 +45,12 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Defines dependencies
+     */
+    public function productPhotos()
+    {
+        return $this->hasMany(ProductPhoto::class)->orderBy('created_at', 'DESC');
+    }
 }

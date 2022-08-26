@@ -119,6 +119,25 @@
                     </div>
 
                     <div class="pt-2">
+                        <label for="photos[]" class="col-md-4 col-form-label">{{ __('Add product photos') }}</label>
+
+                        <input id="photos[]"
+                            multiple="multiple"
+                            type="file"
+                            class="form-control-file"
+                            name="photos[]"
+                            value="{{ old('photos[]') }}"
+                            required
+                            autocomplete="photos[]">
+
+                        @error('photos[]')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="pt-2">
                         <button class="btn btn-primary"> Add new product </button>
                     </div>
                     

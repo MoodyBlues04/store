@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductPhoto;
 use App\Models\User;
 use Intervention\Image\Facades\Image;
 
@@ -33,14 +34,17 @@ class ProductController extends Controller
             'image' => ['required', 'image'],
             'description' => ['string', 'max:500'],
             'characteristics' => ['string', 'max:500'],
+            'photos' => '',
         ]);
+
+        // dd(request()->image);
 
         $imagePath = request('image')->store('uploads', 'public');
 
         $image = Image::make(public_path('storage/' . $imagePath))->resize(230, 140);
         $image->save();
 
-        auth()->user()->products()->create([
+        $product = auth()->user()->products()->create([
             'name' => $data['name'],
             'price' => $data['price'],
             'amount' => $data['amount'],
@@ -48,6 +52,24 @@ class ProductController extends Controller
             'characteristics' => isset($data['characteristics']) ? $data['characteristics'] : null,
             'image' => $imagePath,
         ]);
+
+        $i = 0;
+        foreach(request()->photos as $photo) {
+            // if ($i == 0) {
+            //     $i++;
+            //     continue;
+            // }
+            // $this->validate($photo, [
+            //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // ]);
+
+            $photoPath = $photo->store('uploads', 'public');
+
+            $product->productPhotos()->create([
+                // 'product_id' => $product->id,
+                'path' => $photoPath,
+            ]);
+        }
 
         return redirect('/profile/' . auth()->user()->id);
     }
