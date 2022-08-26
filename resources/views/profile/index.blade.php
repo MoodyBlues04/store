@@ -50,8 +50,8 @@
                                     <div class="card-body">
                                         <h5 class="card-title m-0 p-0">{{$product->name}}</h5>
                                         <div class="d-flex justify-content-between">
-                                            <p class="card-text m-0 p-0"><strong>{{$product->price ?? "N/A"}}p.</strong></p>
-                                            <p class="card-text m-0 p-0">{{$product->amount ?? "N/A"}}шт.</p>
+                                            <p class="card-text m-0 p-0"><strong>{{$product->price}}p.</strong></p>
+                                            <p class="card-text m-0 p-0">{{$product->amount}}шт.</p>
                                         </div>
                                         <p class="card-text m-0 p-0">{{$product->description ?? "N/A"}}</p>
                                     </div>

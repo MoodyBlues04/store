@@ -27,11 +27,12 @@ class ProductController extends Controller
     public function store()
     {
         $data = request()->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required',
-            'amount' => 'required',
+            'name' => ['required', 'string', 'max:20'],
+            'price' => ['required', 'int'],
+            'amount' => ['required', 'int'],
             'image' => ['required', 'image'],
+            'description' => ['required', 'string', 'max:500'],
+            'characteristics' => ['required', 'string', 'max:500'],
         ]);
 
         $imagePath = request('image')->store('uploads', 'public');
@@ -41,9 +42,10 @@ class ProductController extends Controller
 
         auth()->user()->products()->create([
             'name' => $data['name'],
-            'description' => $data['description'],
             'price' => $data['price'],
             'amount' => $data['amount'],
+            'description' => $data['description'],
+            'characteristics' => $data['characteristics'],
             'image' => $imagePath,
         ]);
 
