@@ -49,4 +49,12 @@ class ProductController extends Controller
 
         return redirect('/profile/' . auth()->user()->id);
     }
+
+    /**
+     * Shows product page
+     */
+    public function show(Product $product)
+    {
+        return view('product.show', compact('product'));
+    }
 }

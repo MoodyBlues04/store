@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            $table->unsignedInteger('price');
-            $table->unsignedInteger('amount');
+            $table->unsignedInteger('price')->nullable();
+            $table->unsignedInteger('amount')->nullable();
             $table->string('image');
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->text('characteristics')->nullable();
             $table->timestamps();
 
             $table->index('user_id');
