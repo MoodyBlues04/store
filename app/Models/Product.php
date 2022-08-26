@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property string $name
  * @property string $description
+ * @property string $characteristics
  * @property int $price
  * @property int $amount
  * @property string $image

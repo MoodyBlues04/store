@@ -47,6 +47,24 @@
                     </div>
 
                     <div class="pt-2">
+                        <label for="characteristics" class="col-md-4 col-form-label">{{ __('characteristics') }}</label>
+    
+                        <input id="characteristics"
+                            type="text"
+                            class="form-control @error('characteristics') is-invalid @enderror"
+                            name="characteristics"
+                            value="{{ old('characteristics') }}"
+                            required
+                            autocomplete="characteristics">
+        
+                        @error('characteristics')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="pt-2">
                         <label for="price" class="col-md-4 col-form-label">{{ __('price') }}</label>
     
                         <input id="price"
@@ -83,7 +101,7 @@
                     </div>
 
                     <div class="pt-2">
-                        <label for="image" class="col-md-4 col-form-label">{{ __('image') }}</label>
+                        <label for="image" class="col-md-4 col-form-label">{{ __('Add preview') }}</label>
 
                         <input id="image"
                             type="file"

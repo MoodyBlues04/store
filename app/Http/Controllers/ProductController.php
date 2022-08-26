@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth'); // ! переделать, тк смотреть может любой, а создавать - нет
     }
 
     /**
@@ -31,8 +31,8 @@ class ProductController extends Controller
             'price' => ['required', 'int'],
             'amount' => ['required', 'int'],
             'image' => ['required', 'image'],
-            'description' => ['required', 'string', 'max:500'],
-            'characteristics' => ['required', 'string', 'max:500'],
+            'description' => ['string', 'max:500'],
+            'characteristics' => ['string', 'max:500'],
         ]);
 
         $imagePath = request('image')->store('uploads', 'public');
@@ -44,8 +44,8 @@ class ProductController extends Controller
             'name' => $data['name'],
             'price' => $data['price'],
             'amount' => $data['amount'],
-            'description' => $data['description'],
-            'characteristics' => $data['characteristics'],
+            'description' => isset($data['description']) ? $data['description'] : null,
+            'characteristics' => isset($data['characteristics']) ? $data['characteristics'] : null,
             'image' => $imagePath,
         ]);
 
@@ -54,9 +54,12 @@ class ProductController extends Controller
 
     /**
      * Shows product page
+     * @param int $id
      */
     public function show(Product $product)
     {
-        return view('product.show', compact('product'));
+        return view('product.show', [
+            'product' => $product,
+        ]);
     }
 }

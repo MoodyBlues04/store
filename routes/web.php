@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,6 @@ Route::post('/profile', ProfileController::class . '@store')->name('profile.stor
 
 
 Route::get('/product/create', ProductController::class . '@create')->name('product.create');
-Route::get('/product/{id}', ProductController::class . '@show')->name('product.show');
+Route::get('/product/{product}', ProductController::class . '@show')->name('product.show');
 Route::post('/product', ProductController::class . '@store')->name('product.store');
 
