@@ -79,7 +79,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::find()->all();
+        $products = Product::orderBy('created_at', 'DESC')->get();
         return view('product.index', compact('products'));
     }
 }
