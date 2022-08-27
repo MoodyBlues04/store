@@ -12,7 +12,7 @@
                             <div class="card">
                                 <img class="card-img-top" src="/storage/{{$product->image}}" alt="Card image cap">
                                 <div class="card-body">
-                                    <h3 class="card-title ">{{$product->name}}</h3>
+                                    <h2 class="card-title ">{{$product->name}}</h2>
                                     <div class="d-flex justify-content-between">
                                         <h5 class="card-text mt-1 p-0"><strong>{{$product->price}}p.</strong></h5>
                                         <h5 class="card-text mt-1 p-0">{{$product->amount}}шт.</h5>
