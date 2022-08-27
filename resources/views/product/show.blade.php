@@ -7,14 +7,17 @@
             <div class="row">
                 <div class="col-9">
                     <h1>{{$product->name}}</h1>
-                    <img src="/storage/{{$product->image}}" alt="">
 
                     @if (isset($product->productPhotos))
-                        <div>
-                            @foreach ($product->productPhotos as $photo)
-                                <img src="/storage/{{$photo->path}}" alt="photo">
-                            @endforeach
-                        </div>                        
+                        @foreach ($product->productPhotos as $photo)
+                            <div>
+                                <img
+                                src="/storage/{{$photo->path}}"
+                                alt="photo"
+                                class="w-100"
+                                >
+                            </div>
+                        @endforeach
                     @endif
                     
                 </div>
