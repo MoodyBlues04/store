@@ -73,4 +73,13 @@ class ProductController extends Controller
             'product' => $product,
         ]);
     }
+
+    /**
+     * Shows all products
+     */
+    public function index()
+    {
+        $products = Product::find()->all();
+        return view('product.index', compact('products'));
+    }
 }
