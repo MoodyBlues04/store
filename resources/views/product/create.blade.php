@@ -19,7 +19,7 @@
                             name="name"
                             value="{{ old('name') }}"
                             required
-                            autocomplete="name">
+                            >
         
                         @error('name')
                             <span class="invalid-feedback" role="alert">
@@ -37,7 +37,7 @@
                             name="description"
                             value="{{ old('description') }}"
                             required
-                            autocomplete="description">
+                            >
         
                         @error('description')
                             <span class="invalid-feedback" role="alert">
@@ -55,7 +55,7 @@
                             name="characteristics"
                             value="{{ old('characteristics') }}"
                             required
-                            autocomplete="characteristics">
+                            >
         
                         @error('characteristics')
                             <span class="invalid-feedback" role="alert">
@@ -73,7 +73,7 @@
                             name="price"
                             value="{{ old('price') }}"
                             required
-                            autocomplete="price">
+                            >
         
                         @error('price')
                             <span class="invalid-feedback" role="alert">
@@ -91,7 +91,7 @@
                             name="amount"
                             value="{{ old('amount') }}"
                             required
-                            autocomplete="amount">
+                            >
         
                         @error('amount')
                             <span class="invalid-feedback" role="alert">
@@ -109,7 +109,7 @@
                             name="image"
                             value="{{ old('image') }}"
                             required
-                            autocomplete="image">
+                            >
 
                         @error('image')
                             <span class="invalid-feedback" role="alert">
@@ -122,13 +122,13 @@
                         <label for="photos[]" class="col-md-4 col-form-label">{{ __('Add product photos') }}</label>
 
                         <input id="photos[]"
-                            multiple="multiple"
                             type="file"
                             class="form-control-file"
                             name="photos[]"
                             value="{{ old('photos[]') }}"
+                            multiple
                             required
-                            autocomplete="photos[]">
+                            >
 
                         @error('photos[]')
                             <span class="invalid-feedback" role="alert">
