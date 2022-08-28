@@ -35,10 +35,11 @@
                             <div>
                                 <a href="/profile/{{$user->id}}/edit">Edit profile</a>
                             </div>
+                            <div>
+                                <a href="/product/create">Add new product</a>
+                            </div>
                         @endcan
-                        <div>
-                            <a href="/product/create">Add new product</a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

@@ -54,7 +54,7 @@ class ProductController extends Controller
         $this->authorize('update', $product);
 
         $data = request()->validate($this->validationRules);
-
+        
         $product->name = $data['name'];
         $product->price = $data['price'];
         $product->amount = $data['amount'];

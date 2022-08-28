@@ -21,14 +21,14 @@
                                     @if (isset($product->description))
                                         <div>
                                             <h5 class="mt-1 mb-3">Description</h5>
-                                            <p class="card-text m-0 p-0">{{$product->description}}</p>
+                                            <p class="card-text m-0 p-0">{{$product->description ?? "N/A"}}</p>
                                         </div>
                                     @endif
                                     
                                     @if (isset($product->characteristics))
                                         <div class="mt-2 mb-3">
                                             <h5 class="mt-1 mb-3">Characteristics</h5>
-                                            <p class="card-text m-0 p-0">{{$product->characteristics}}</p>
+                                            <p class="card-text m-0 p-0">{{$product->characteristics ?? "N/A"}}</p>
                                         </div>
                                     @endif
                                 </div>
