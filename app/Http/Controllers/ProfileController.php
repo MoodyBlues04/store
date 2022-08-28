@@ -56,7 +56,7 @@ class ProfileController extends Controller
             $imagePath = $this->storeProfileImage(request('image'));
 
             if (isset($user->profile->image)) {
-                unlink($user->profile->image);
+                unlink(__DIR__ . '/../../../storage/app/public/' . $user->profile->image);
             }
         } else {
             $imagePath = $user->profile->image;
