@@ -54,6 +54,10 @@ class ProductController extends Controller
 
         $data = request()->validate($this->validationRules);
 
+        // TODO переделать сохранение фотографий:
+        // 1) если не введены, сохраняются старые
+        // 2) усли введены, старые удаляются
+
         $product->name = $data['name'];
         $product->price = $data['price'];
         $product->amount = $data['amount'];

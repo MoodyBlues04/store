@@ -48,8 +48,24 @@ class ProfileController extends Controller
     {
         $this->authorize('update', $user->profile);
 
+        // TODO удаление не используемых фотографий
+
         $data = request()->validate($this->validationRules);
-        auth()->user()->profile->update($data);
+
+        if (request('image') !== null) {
+            $imagePath = $this->storeProfileImage(request('image'));
+
+            if (isset($user->profile->image)) {
+                unlink($user->profile->image);
+            }
+        } else {
+            $imagePath = $user->profile->image;
+        }
+
+        auth()->user()->profile->update(array_merge(
+            $data,
+            ['image' => $imagePath]
+        ));
 
         return redirect("/profile/{$user->id}");
     }
@@ -62,10 +78,7 @@ class ProfileController extends Controller
         $data = request()->validate($this->validationRules);
 
         if (request('image') !== null) {
-            $imagePath = request('image')->store('images', 'public');
-
-            $image = Image::make(public_path('storage/' . $imagePath))->resize(200, 200);
-            $image->save();
+            $imagePath = $this->storeProfileImage(request('image'));
         } else {
             $imagePath = null;
         }
@@ -77,5 +90,20 @@ class ProfileController extends Controller
         ]);        
 
         return redirect('/profile/' . auth()->user()->id);
+    }
+
+    /**
+     * Stores and resize an image
+     * @param UploadedFile $image
+     * @return string
+     */
+    public function storeProfileImage($image)
+    {
+        $imagePath = $image->store('profile', 'public');
+
+        $img = Image::make(public_path("storage/{$imagePath}"))->resize(1000, 1000);
+        $img->save();
+
+        return $imagePath;
     }
 }
