@@ -21,16 +21,21 @@
                     <div>
                         <h1>{{ $user->profile->username ?? "Enter username" }}</h1>
                     </div>
+
                     <div>
                         <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
                     </div>
+
                     <div>
                         <p>{{ (string)count($user->products) . ' товаров'}}</p>
                     </div>
+                    
                     <div class="d-flex flex-column">
-                        <div>
-                            <a href="/profile/{{$user->id}}/edit">Edit profile</a>
-                        </div>
+                        @can('update', $user->profile)
+                            <div>
+                                <a href="/profile/{{$user->id}}/edit">Edit profile</a>
+                            </div>
+                        @endcan
                         <div>
                             <a href="/product/create">Add new product</a>
                         </div>

@@ -9,11 +9,6 @@ use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth'); // ! переделать, тк смотреть может любой, а создавать - нет
-    }
-
     /**
      * Creates product
      */
@@ -29,7 +24,49 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $this->authorize('update', $product);
+
         return view('product.edit', compact('product'));
+    }
+
+    /**
+     * Validation rules for Profile model
+     * @var array<string,string[]> $valdationRules field => rules
+     */
+    protected $validationRules = [
+        'name' => ['required', 'string', 'max:20'],
+        'price' => ['required', 'int'],
+        'amount' => ['required', 'int'],
+        'image' => ['required', 'image'],
+        'description' => ['string', 'max:500', 'nullable'],
+        'characteristics' => ['string', 'max:500', 'nullable'],
+        'photos' => 'required',
+        'photos.*' => 'mimes:jpg,jpeg,png',
+    ];
+
+    /**
+     * Updates product's data
+     * @param Product $product
+     */
+    public function update(Product $product)
+    {
+        $this->authorize('update', $product);
+
+        $data = request()->validate($this->validationRules);
+
+        $product->name = $data['name'];
+        $product->price = $data['price'];
+        $product->amount = $data['amount'];
+        $product->image = request('image')->store('uploads', 'public');
+        $product->description = isset($data['description']) ? $data['description'] : null;
+        $product->characteristics = isset($data['characteristics']) ? $data['characteristics'] : null;
+        $product->save();
+
+        if (!$this->storeProductPhotos($product, request()->photos)) {
+            throw new \Exception("Product's photos not saved");
+        }
+
+        return redirect('/profile/' . auth()->user()->id);
     }
 
     /**
@@ -55,21 +92,7 @@ class ProductController extends Controller
      */
     public function store()
     {
-        $data = request()->validate([
-            'name' => ['required', 'string', 'max:20'],
-            'price' => ['required', 'int'],
-            'amount' => ['required', 'int'],
-            'image' => ['required', 'image'],
-            'description' => ['string', 'max:500', 'nullable'],
-            'characteristics' => ['string', 'max:500', 'nullable'],
-            'photos' => 'required',
-            'photos.*' => 'mimes:jpg,jpeg,png'
-        ]);
-
-        $imagePath = request('image')->store('uploads', 'public');
-
-        $image = Image::make(public_path('storage/' . $imagePath))->resize(230, 140);
-        $image->save();
+        $data = request()->validate($this->validationRules);
 
         $product = auth()->user()->products->create([
             'name' => $data['name'],
@@ -77,19 +100,36 @@ class ProductController extends Controller
             'amount' => $data['amount'],
             'description' => isset($data['description']) ? $data['description'] : null,
             'characteristics' => isset($data['characteristics']) ? $data['characteristics'] : null,
-            'image' => $imagePath,
+            'image' => request('image')->store('uploads', 'public'),
         ]);
 
-        foreach(request()->photos as $photo) {
-            $photoPath = $photo->store('uploads', 'public');
-
-            $product->productPhotos()->create([
-                'path' => $photoPath,
-            ]);
+        if (!$this->storeProductPhotos($product, request()->photos)) {
+            throw new \Exception("Product's photos not saved");
         }
 
         return redirect('/profile/' . auth()->user()->id);
     }
 
-    
+    /**
+     * Stores all product photos
+     * @param Product $product
+     * @param UploadedFile[] $photos
+     * @return bool
+     */
+    public function storeProductPhotos(Product $product, $photos)
+    {
+        try {
+            foreach($photos as $photo) {
+                $photoPath = $photo->store('uploads', 'public');
+
+                $product->productPhotos()->create([
+                    'path' => $photoPath,
+                ]);
+            }
+        } catch (\Exception) {
+            return false;
+        }
+        
+        return true;
+    }    
 }
