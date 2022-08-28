@@ -15,9 +15,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        return view('profile.index', [
-            'user' => $user,
-        ]);
+        return view('profile.index', compact('user'));
     }
 
     /**
@@ -27,9 +25,29 @@ class ProfileController extends Controller
      */
     public function edit(User $user)
     {
-        return view('profile.edit', [
-            'user' => $user,
-        ]);
+        return view('profile.edit', compact('user'));
+    }
+
+    /**
+     * Validation rules for Profile model
+     * @var array<string,string[]> $valdationRules field => rules
+     */
+    protected $validationRules = [
+        'username' => ['required', 'string', 'max:20'],
+        'introduction' => ['required', 'string', 'max:500'],
+        'image' => ['image', 'mimes:jpg,jpeg,png'],
+    ];
+
+    /**
+     * Updates profile's data
+     * @param User $user
+     */
+    public function update(User $user)
+    {
+        $data = request()->validate($this->validationRules);
+        $user->profile()->update($data);
+
+        return redirect("/profile/{$user->id}");
     }
 
     /**
@@ -37,31 +55,22 @@ class ProfileController extends Controller
      */
     public function store()
     {
-        $data = request()->validate([
-            'username' => ['required', 'string', 'max:20'],
-            'introduction' => ['required', 'string', 'max:500'],
-            'image' => ['required', 'image'],
-        ]);
+        $data = request()->validate($this->validationRules);
 
-        $imagePath = request('image')->store('images', 'public');
+        if (request('image') !== null) {
+            $imagePath = request('image')->store('images', 'public');
 
-        $image = Image::make(public_path('storage/' . $imagePath))->resize(200, 200);
-        $image->save();
-
-        if (!isset(auth()->user()->profile)) {
-            auth()->user()->profile()->create([
-                'username' => $data['username'],
-                'introduction' => $data['introduction'],
-                'image' => $imagePath,
-            ]);
+            $image = Image::make(public_path('storage/' . $imagePath))->resize(200, 200);
+            $image->save();
         } else {
-            $profile = auth()->user()->profile;
-            $profile->username = $data['username'];
-            $profile->introduction = $data['introduction'];
-            $profile->image = $imagePath;
-            $profile->save();
+            $imagePath = null;
         }
         
+        auth()->user()->profile()->create([
+            'username' => $data['username'],
+            'introduction' => $data['introduction'],
+            'image' => $imagePath,
+        ]);        
 
         return redirect('/profile/' . auth()->user()->id);
     }

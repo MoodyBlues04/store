@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,13 +26,28 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// profile routes
 Route::get('/profile/{user}/edit', ProfileController::class . '@edit')->name('profile.edit');
+Route::patch('/profile/{user}', ProfileController::class . '@update')->name('profile.update');
 Route::get('/profile/{user}', ProfileController::class . '@show')->name('profile.show');
 Route::post('/profile', ProfileController::class . '@store')->name('profile.store');
 
-
+// product routes
 Route::get('/product/create', ProductController::class . '@create')->name('product.create');
+Route::get('/product/{product}/edit', ProductController::class . '@edit')->name('product.edit');
 Route::get('/product/{product}', ProductController::class . '@show')->name('product.show');
 Route::get('/product', ProductController::class . '@index')->name('product.index');
 Route::post('/product', ProductController::class . '@store')->name('product.store');
 
+// test routes
+Route::get('/test-hash/{password}', function($password) {
+    dd(Hash::make($password));
+});
+Route::get('/test-hash-check/{password}', function($password) {
+    dd(Hash::check($password, '$2y$10$KJQyjivNrXdSJ3HlgfDMgemzuF7TjJH321eU/aLC2BCT1NW40TMwS'));
+});
+Route::get('/test', function() {
+    $obj = new \App\Models\User();
+    var_dump(get_class($obj));
+    exit;
+});

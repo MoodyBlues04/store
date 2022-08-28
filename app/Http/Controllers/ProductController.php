@@ -23,6 +23,34 @@ class ProductController extends Controller
     }
 
     /**
+     * Edits product's info
+     * @param Product $product
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function edit(Product $product)
+    {
+        return view('product.edit', compact('product'));
+    }
+
+    /**
+     * Shows product page
+     * @param int $id
+     */
+    public function show(Product $product)
+    {
+        return view('product.show', compact('product'));
+    }
+
+    /**
+     * Shows all products
+     */
+    public function index()
+    {
+        $products = Product::orderBy('created_at', 'DESC')->get();
+        return view('product.index', compact('products'));
+    }
+    
+    /**
      * Stores new product into the DB
      */
     public function store()
@@ -63,23 +91,5 @@ class ProductController extends Controller
         return redirect('/profile/' . auth()->user()->id);
     }
 
-    /**
-     * Shows product page
-     * @param int $id
-     */
-    public function show(Product $product)
-    {
-        return view('product.show', [
-            'product' => $product,
-        ]);
-    }
-
-    /**
-     * Shows all products
-     */
-    public function index()
-    {
-        $products = Product::orderBy('created_at', 'DESC')->get();
-        return view('product.index', compact('products'));
-    }
+    
 }

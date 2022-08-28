@@ -17,7 +17,6 @@
                             type="text"
                             class="form-control @error('name') is-invalid @enderror"
                             name="name"
-                            value="{{ old('name') }}"
                             required
                             >
         
@@ -35,8 +34,6 @@
                             type="text"
                             class="form-control @error('description') is-invalid @enderror"
                             name="description"
-                            value="{{ old('description') }}"
-                            required
                             >
         
                         @error('description')
@@ -53,8 +50,6 @@
                             type="text"
                             class="form-control @error('characteristics') is-invalid @enderror"
                             name="characteristics"
-                            value="{{ old('characteristics') }}"
-                            required
                             >
         
                         @error('characteristics')
@@ -71,7 +66,6 @@
                             type="text"
                             class="form-control @error('price') is-invalid @enderror"
                             name="price"
-                            value="{{ old('price') }}"
                             required
                             >
         
@@ -89,7 +83,6 @@
                             type="text"
                             class="form-control @error('amount') is-invalid @enderror"
                             name="amount"
-                            value="{{ old('amount') }}"
                             required
                             >
         
@@ -107,7 +100,6 @@
                             type="file"
                             class="form-control-file"
                             name="image"
-                            value="{{ old('image') }}"
                             required
                             >
 
@@ -125,7 +117,6 @@
                             type="file"
                             class="form-control-file"
                             name="photos[]"
-                            value="{{ old('photos[]') }}"
                             multiple
                             required
                             >
