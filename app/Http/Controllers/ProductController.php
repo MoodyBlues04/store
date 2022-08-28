@@ -49,7 +49,7 @@ class ProductController extends Controller
         $products = Product::orderBy('created_at', 'DESC')->get();
         return view('product.index', compact('products'));
     }
-    
+
     /**
      * Stores new product into the DB
      */
@@ -60,8 +60,8 @@ class ProductController extends Controller
             'price' => ['required', 'int'],
             'amount' => ['required', 'int'],
             'image' => ['required', 'image'],
-            'description' => ['string', 'max:500'],
-            'characteristics' => ['string', 'max:500'],
+            'description' => ['string', 'max:500', 'nullable'],
+            'characteristics' => ['string', 'max:500', 'nullable'],
             'photos' => 'required',
             'photos.*' => 'mimes:jpg,jpeg,png'
         ]);
@@ -71,7 +71,7 @@ class ProductController extends Controller
         $image = Image::make(public_path('storage/' . $imagePath))->resize(230, 140);
         $image->save();
 
-        $product = auth()->user()->products()->create([
+        $product = auth()->user()->products->create([
             'name' => $data['name'],
             'price' => $data['price'],
             'amount' => $data['amount'],

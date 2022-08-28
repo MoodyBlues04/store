@@ -45,7 +45,7 @@ class ProfileController extends Controller
     public function update(User $user)
     {
         $data = request()->validate($this->validationRules);
-        $user->profile()->update($data);
+        auth()->user()->profile->update($data);
 
         return redirect("/profile/{$user->id}");
     }
@@ -66,7 +66,7 @@ class ProfileController extends Controller
             $imagePath = null;
         }
         
-        auth()->user()->profile()->create([
+        auth()->user()->profile->create([
             'username' => $data['username'],
             'introduction' => $data['introduction'],
             'image' => $imagePath,
