@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Intervention\Image\Facades\Image;
 
 /**
  * Class Product
@@ -64,6 +65,8 @@ class Product extends Model
         try {
             foreach($photos as $photo) {
                 $photoPath = $photo->store('product_photos', 'public');
+                $photo = Image::make(public_path("storage/{$photoPath}"))->resize(610, 350);
+                $photo->save();
 
                 $this->productPhotos()->create([
                     'path' => $photoPath,
