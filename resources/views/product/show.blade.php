@@ -78,6 +78,7 @@
                                         </div>
                                     @endcan 
                                 </div>
+                                
                                 <img
                                     class="rounded-circle"
                                     style="width: 35%"

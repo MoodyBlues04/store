@@ -53,13 +53,25 @@
                             <a href="/product/{{$product->id}}" style="text-decoration:none; color:black">
                                 <div class="card">
                                     <img class="card-img-top" src="/storage/{{$product->image}}" alt="Card image cap">
+                                    
                                     <div class="card-body">
                                         <h5 class="card-title m-0 p-0">{{$product->name}}</h5>
+                                        
                                         <div class="d-flex justify-content-between">
                                             <p class="card-text m-0 p-0"><strong>{{$product->price}}p.</strong></p>
+                                            
                                             <p class="card-text m-0 p-0">{{$product->amount}}шт.</p>
                                         </div>
-                                        <p class="card-text m-0 p-0">{{$product->description ?? "N/A"}}</p>
+                                        
+                                        <p class="card-text m-0 p-0">
+                                            @if (!isset($product->description))
+                                                {{ "description unset" }}
+                                            @elseif (mb_strlen($product->description, 'utf-8') > 50)
+                                                {{ mb_substr($product->description, 0, 50) . '...' }}
+                                            @else
+                                                {{ $product->description }}
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
                             </a>

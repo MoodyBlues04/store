@@ -52,6 +52,8 @@ class ProductController extends Controller
     public function update(Product $product)
     {
         $this->authorize('update', $product);
+        
+        ini_set('memory_limit', '16M');
 
         $data = request()->validate($this->validationRules);
 
@@ -100,6 +102,8 @@ class ProductController extends Controller
     public function store()
     {
         $data = request()->validate($this->validationRules);
+
+        ini_set('memory_limit', '16M');
 
         $product = auth()->user()->products()->create([
             'name' => $data['name'],
