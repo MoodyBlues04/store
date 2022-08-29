@@ -26,15 +26,50 @@
                             </span>
                         @enderror
                     </div>
+                    
+                    <div class="pt-2">
+                        <label for="price" class="col-md-4 col-form-label">{{ __('price') }}</label>
+    
+                        <input id="price"
+                        type="text"
+                        class="form-control @error('price') is-invalid @enderror"
+                        name="price"
+                        required
+                        >
+                        
+                        @error('price')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
 
+                    <div class="pt-2">
+                        <label for="amount" class="col-md-4 col-form-label">{{ __('amount') }}</label>
+                        
+                        <input id="amount"
+                        type="text"
+                        class="form-control @error('amount') is-invalid @enderror"
+                        name="amount"
+                        required
+                        >
+                        
+                        @error('amount')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    
                     <div class="pt-2">
                         <label for="description" class="col-md-4 col-form-label">{{ __('description') }}</label>
     
-                        <input id="description"
+                        <textarea id="description"
                             type="text"
                             class="form-control @error('description') is-invalid @enderror"
                             name="description"
-                            >
+                            rows="4"
+                        > </textarea>
         
                         @error('description')
                             <span class="invalid-feedback" role="alert">
@@ -46,11 +81,12 @@
                     <div class="pt-2">
                         <label for="characteristics" class="col-md-4 col-form-label">{{ __('characteristics') }}</label>
     
-                        <input id="characteristics"
+                        <textarea id="characteristics"
                             type="text"
                             class="form-control @error('characteristics') is-invalid @enderror"
                             name="characteristics"
-                            >
+                            rows="4"
+                        > </textarea>
         
                         @error('characteristics')
                             <span class="invalid-feedback" role="alert">
@@ -58,41 +94,7 @@
                             </span>
                         @enderror
                     </div>
-
-                    <div class="pt-2">
-                        <label for="price" class="col-md-4 col-form-label">{{ __('price') }}</label>
-    
-                        <input id="price"
-                            type="text"
-                            class="form-control @error('price') is-invalid @enderror"
-                            name="price"
-                            required
-                            >
-        
-                        @error('price')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <div class="pt-2">
-                        <label for="amount" class="col-md-4 col-form-label">{{ __('amount') }}</label>
-    
-                        <input id="amount"
-                            type="text"
-                            class="form-control @error('amount') is-invalid @enderror"
-                            name="amount"
-                            required
-                            >
-        
-                        @error('amount')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
+                    
                     <div class="pt-2">
                         <label for="image" class="col-md-4 col-form-label">{{ __('Add preview') }}</label>
 
@@ -128,7 +130,7 @@
                         @enderror
                     </div>
 
-                    <div class="pt-2">
+                    <div class="pt-3">
                         <button class="btn btn-primary"> Add new product </button>
                     </div>
                     

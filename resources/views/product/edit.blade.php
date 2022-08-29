@@ -29,40 +29,6 @@
                     </div>
 
                     <div class="pt-2">
-                        <label for="description" class="col-md-4 col-form-label">{{ __('description') }}</label>
-    
-                        <input id="description"
-                            type="text"
-                            class="form-control @error('description') is-invalid @enderror"
-                            name="description"
-                            value="{{ old('description') ?? $product->description }}"
-                            >
-        
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <div class="pt-2">
-                        <label for="characteristics" class="col-md-4 col-form-label">{{ __('characteristics') }}</label>
-    
-                        <input id="characteristics"
-                            type="text"
-                            class="form-control @error('characteristics') is-invalid @enderror"
-                            name="characteristics"
-                            value="{{ old('characteristics') ?? $product->characteristics }}"
-                            >
-        
-                        @error('characteristics')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-
-                    <div class="pt-2">
                         <label for="price" class="col-md-4 col-form-label">{{ __('price') }}</label>
     
                         <input id="price"
@@ -92,6 +58,40 @@
                             >
         
                         @error('amount')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    
+                    <div class="pt-2">
+                        <label for="description" class="col-md-4 col-form-label">{{ __('description') }}</label>
+    
+                        <textarea id="description"
+                            type="text"
+                            class="form-control @error('description') is-invalid @enderror"
+                            name="description"
+                            rows="4"
+                        >{{ old('description') ?? $product->description }}</textarea>
+        
+                        @error('description')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="pt-2">
+                        <label for="characteristics" class="col-md-4 col-form-label">{{ __('characteristics') }}</label>
+    
+                        <textarea id="characteristics"
+                            type="text"
+                            class="form-control @error('characteristics') is-invalid @enderror"
+                            name="characteristics"
+                            rows="4"
+                            >{{ old('characteristics') ?? $product->characteristics }}</textarea>
+        
+                        @error('characteristics')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -131,7 +131,7 @@
                         @enderror
                     </div>
 
-                    <div class="pt-2">
+                    <div class="pt-3">
                         <button class="btn btn-primary"> Save changes </button>
                     </div>
                     

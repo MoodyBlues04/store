@@ -31,12 +31,12 @@
                     <div class="pt-2">
                         <label for="introduction" class="col-md-4 col-form-label">{{ __('introduction') }}</label>
     
-                        <input id="introduction"
+                        <textarea id="introduction"
                             type="text"
                             class="form-control @error('introduction') is-invalid @enderror"
                             name="introduction"
-                            value="{{ old('introduction') ?? $user->profile->introduction }}"
-                            required>
+                            required
+                        >{{ old('introduction') ?? $user->profile->introduction }}</textarea>
         
                         @error('introduction')
                             <span class="invalid-feedback" role="alert">
