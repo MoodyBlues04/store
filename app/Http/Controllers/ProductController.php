@@ -54,11 +54,11 @@ class ProductController extends Controller
         $this->authorize('update', $product);
 
         $data = request()->validate($this->validationRules);
-        
+
         $product->name = $data['name'];
         $product->price = $data['price'];
         $product->amount = $data['amount'];
-        $product->image = request('image')->store('uploads', 'public');
+        $product->image = $this->storeProductImage(request('image'));
         $product->description = isset($data['description']) ? $data['description'] : null;
         $product->characteristics = isset($data['characteristics']) ? $data['characteristics'] : null;
         $product->save();
@@ -101,13 +101,13 @@ class ProductController extends Controller
     {
         $data = request()->validate($this->validationRules);
 
-        $product = auth()->user()->products->create([
+        $product = auth()->user()->products()->create([
             'name' => $data['name'],
             'price' => $data['price'],
             'amount' => $data['amount'],
             'description' => isset($data['description']) ? $data['description'] : null,
             'characteristics' => isset($data['characteristics']) ? $data['characteristics'] : null,
-            'image' => request('image')->store('uploads', 'public'),
+            'image' => $this->storeProductImage(request('image'))
         ]);
 
         if (!$product->storePhotos(request()->photos)) {
@@ -115,5 +115,19 @@ class ProductController extends Controller
         }
 
         return redirect('/profile/' . auth()->user()->id);
+    }
+
+    /**
+     * Stores and resize an image
+     * @param UploadedFile $image
+     * @return string
+     */
+    public function storeProductImage($image)
+    {
+        $imagePath = $image->store('product_images', 'public');
+        $img = Image::make(public_path("storage/{$imagePath}"))->resize(610, 350);
+        $img->save();
+
+        return $imagePath;
     }
 }

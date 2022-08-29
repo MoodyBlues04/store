@@ -48,8 +48,6 @@ class ProfileController extends Controller
     {
         $this->authorize('update', $user->profile);
 
-        // TODO удаление не используемых фотографий
-
         $data = request()->validate($this->validationRules);
 
         if (request('image') !== null) {
@@ -62,10 +60,9 @@ class ProfileController extends Controller
             $imagePath = $user->profile->image;
         }
 
-        auth()->user()->profile->update(array_merge(
-            $data,
-            ['image' => $imagePath]
-        ));
+        $data['image'] = $imagePath;
+
+        auth()->user()->profile->update($data);
 
         return redirect("/profile/{$user->id}");
     }
@@ -83,7 +80,7 @@ class ProfileController extends Controller
             $imagePath = null;
         }
         
-        auth()->user()->profile->create([
+        auth()->user()->profile()->create([
             'username' => $data['username'],
             'introduction' => $data['introduction'],
             'image' => $imagePath,
@@ -100,8 +97,7 @@ class ProfileController extends Controller
     public function storeProfileImage($image)
     {
         $imagePath = $image->store('profile', 'public');
-
-        $img = Image::make(public_path("storage/{$imagePath}"))->resize(1000, 1000);
+        $img = Image::make(public_path("storage/{$imagePath}"))->resize(500, 500);
         $img->save();
 
         return $imagePath;

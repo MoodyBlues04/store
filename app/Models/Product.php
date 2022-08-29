@@ -63,7 +63,7 @@ class Product extends Model
     {
         try {
             foreach($photos as $photo) {
-                $photoPath = $photo->store('uploads', 'public');
+                $photoPath = $photo->store('product_photos', 'public');
 
                 $this->productPhotos()->create([
                     'path' => $photoPath,

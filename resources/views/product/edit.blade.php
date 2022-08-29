@@ -105,7 +105,6 @@
                             type="file"
                             class="form-control-file"
                             name="image"
-                            required
                             >
 
                         @error('image')
