@@ -50,7 +50,7 @@
                     @endif
                     
                     @if (isset($product->description))
-                        <div>
+                        <div class="pt-4">
                             <h2>Description</h2>
                             <p>{{$product->description}}</p>
                         </div>
@@ -93,11 +93,16 @@
                                 >
                             </div>
                         </a>
-                       
-                        <button class="btn btn-success w-100 d-flex flex-column justify-content-between align-items-center">
+
+                        <a href={{ Auth::check() ? "#" : "/login" }}
+                            class="btn btn-success w-100 d-flex flex-column justify-content-between align-items-center">
                             <h3 class="mt-2">Phone</h3>
-                            <h5>{{$product->user->phone}}</h5>
-                        </button>                      
+                            @if (Auth::check())
+                                <h5>{{$product->user->phone}}</h5>
+                            @else
+                                <h5>{{ substr($product->user->phone, 0, 4) . "-XXX-XX-XX" }}</h5>
+                            @endif
+                        </a>                      
                     </div>
                 </div>
             </div>
