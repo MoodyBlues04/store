@@ -57,6 +57,13 @@ class Product extends Model
         return $this->hasMany(ProductPhoto::class)->orderBy('created_at', 'DESC');
     }
 
+    public static function boot()
+    {
+        static::deleting(function ($product) {
+
+        });
+    }
+
     /**
      * Stores all product photos
      * @param UploadedFile[] $photos
@@ -105,11 +112,15 @@ class Product extends Model
 
     /**
      * Removes old image of current product
+     * @throws \Exception
      * @return void
      */
     public function removeImage()
     {
         $path = self::STORAGE_PATH . $this->image;
+        // if (!file_exists($path)) {
+        //     throw new \Exception("no such file or directory:" . $path);
+        // }
         if (file_exists($path)) {
             unlink($path);
         }

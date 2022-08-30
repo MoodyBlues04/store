@@ -50,7 +50,6 @@ class ProductController extends Controller
         ]);
 
         $imagePath = $product->image;
-
         if (request('image') !== null) {
             $product->removeImage();
             $imagePath = $this->storeProductImage(request('image'));
@@ -63,9 +62,10 @@ class ProductController extends Controller
         $product->description = $data['description'] ?? null;
         $product->characteristics = $data['characteristics'] ?? null;
 
+
         if (!$product->save()) {
             throw new \Exception("Product not saved");
-        };
+        }
 
         if (request()->photos !== null) {
             $product->removePhotos();

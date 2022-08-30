@@ -33,6 +33,15 @@ class Profile extends Model
         'image',
     ];
 
+    public static function boot()
+    {
+        static::deleting(function ($profile) {
+            foreach ($profile->user->products as $product) {
+                $product->delete();
+            }
+        });
+    }
+
     /**
      * Defines dependencies
      */
@@ -43,15 +52,17 @@ class Profile extends Model
 
     /**
      * Removes old profile's image
+     * @throws \Exception
      * @return void
      */
     public function removeImage()
     {
         if (isset($this->image)) {
             $path = self::STORAGE_PATH . $this->image;
-            if (file_exists($path)) {
-                unlink($path);
+            if (!file_exists($path)) {
+                throw new \Exception("no such file or directory:" . $path);
             }
+            unlink($path);
         }
     }
 }

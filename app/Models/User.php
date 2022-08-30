@@ -55,6 +55,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function boot()
+    {
+        static::created(function ($user) {
+            $user->profile()->create();
+        });
+
+        static::deleting(function ($user) {
+            $user->profile()->delete();
+        });
+    }
+
     /**
      * Defines dependencies
      */
