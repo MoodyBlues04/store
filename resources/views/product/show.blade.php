@@ -77,6 +77,22 @@
                                             <a href="/product/{{$product->id}}/edit">Edit product</a>
                                         </div>
                                     @endcan 
+                                    @can('delete', $product)
+                                        <div>
+                                            <a style="color:black" 
+                                                href="{{ route('product.destroy', ['product' => $product]) }}"
+                                                onclick="event.preventDefault();
+                                                document.getElementById('delete-form-{{ $product->id }}').submit();">
+                                                Delete product
+                                            </a>
+
+                                            <form id="delete-form-{{ $product->id }}" action="{{ route('product.destroy', ['product' => $product]) }}"
+                                                method="POST" style="display: none;">
+                                                @csrf
+                                                @method("DELETE")
+                                            </form>
+                                        </div>
+                                    @endcan 
                                 </div>
                                 
                                 <img

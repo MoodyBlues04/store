@@ -51,6 +51,7 @@ class ProductController extends Controller
 
         $imagePath = $product->image;
         if (request('image') !== null) {
+            $product->removeImage();
             $imagePath = $this->storeProductImage(request('image'));
         }
 
@@ -63,7 +64,7 @@ class ProductController extends Controller
         $product->save();
 
         if (isset(request()->photos)) {
-            $product->removeOldPhotos();
+            $product->removePhotos();
             
             if (!$product->storePhotos(request()->photos)) {
                 throw new \Exception("Product's photos not saved");
@@ -75,7 +76,7 @@ class ProductController extends Controller
 
     /**
      * Shows product page
-     * @param int $id
+     * @param Product $product
      */
     public function show(Product $product)
     {
@@ -121,6 +122,21 @@ class ProductController extends Controller
         }
 
         return redirect('/profile/' . auth()->user()->id);
+    }
+
+    /**
+     * Deletes product
+     * @param Product $product
+     */
+    public function destroy(Product $product)
+    {
+        $this->authorize('delete', $product);
+
+        $product->removeImage();
+        $product->removePhotos();
+        $product->delete();
+
+        return redirect('/profile/' . auth()->user()->id);    
     }
 
     /**

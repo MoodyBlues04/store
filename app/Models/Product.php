@@ -25,7 +25,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    const PHOTO_PATH = __DIR__ . '/../../storage/app/public/';
+    const STORAGE_PATH = __DIR__ . '/../../storage/app/public/';
 
     /**
      * The attributes that are mass assignable.
@@ -62,7 +62,7 @@ class Product extends Model
      * @param UploadedFile[] $photos
      * @return bool
      */
-    public function storePhotos($photos)
+    public function storePhotos($photos): bool
     {
         try {
             foreach($photos as $photo) {
@@ -86,24 +86,35 @@ class Product extends Model
      * @return int count of removed files
      * @throws \Exception
      */
-    public function removeOldPhotos()
+    public function removePhotos(): int
     {
         $productPhotos = $this->productPhotos;
         $count = 0;
-        try {
-            foreach ($productPhotos as $photo) {
-                $path = self::PHOTO_PATH . $photo->path;
-                if (file_exists($path)) {
-                    unlink($path);
-                    $count++;
-                }
-                $photo->delete();
+
+        foreach ($productPhotos as $photo) {
+            $path = self::STORAGE_PATH . $photo->path;
+            if (file_exists($path)) {
+                unlink($path);
+                $count++;
             }
-        } catch(\Exception $exception) {
-            throw $exception;
+            $photo->delete();
         }
 
-        
         return $count;
+    }
+
+    /**
+     * Removes old image of current product
+     * @throws \Exception
+     * @return void
+     */
+    public function removeImage()
+    {
+        $path = self::STORAGE_PATH . $this->image;
+        if (file_exists($path)) {
+            unlink($path);
+        } else {
+            throw new \Exception("File doesn't exist");
+        }
     }
 }

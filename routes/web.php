@@ -39,6 +39,7 @@ Route::patch('/product/{product}', ProductController::class . '@update')->name('
 Route::get('/product/{product}', ProductController::class . '@show')->name('product.show');
 Route::get('/product', ProductController::class . '@index')->name('product.index');
 Route::post('/product', ProductController::class . '@store')->name('product.store');
+Route::delete('/product/{product}', ProductController::class . '@destroy')->name('product.destroy');
 
 // test routes
 Route::get('/test-hash/{password}', function($password) {
