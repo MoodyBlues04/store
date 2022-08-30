@@ -113,8 +113,6 @@ class Product extends Model
         $path = self::STORAGE_PATH . $this->image;
         if (file_exists($path)) {
             unlink($path);
-        } else {
-            throw new \Exception("File doesn't exist");
         }
     }
 }

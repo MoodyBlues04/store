@@ -50,20 +50,24 @@ class ProductController extends Controller
         ]);
 
         $imagePath = $product->image;
+
         if (request('image') !== null) {
             $product->removeImage();
             $imagePath = $this->storeProductImage(request('image'));
         }
 
-        $product->name = isset($data['name']) ? $data['name'] : $product->name;
-        $product->price = isset($data['price']) ? $data['price'] : $product->price;
-        $product->amount = isset($data['amount']) ? $data['amount'] : $product->amount;
+        $product->name = $data['name'] ?? $product->name;
+        $product->price = $data['price'] ?? $product->price;
+        $product->amount = $data['amount'] ?? $product->amount;
         $product->image =  $imagePath;
-        $product->description = isset($data['description']) ? $data['description'] : null;
-        $product->characteristics = isset($data['characteristics']) ? $data['characteristics'] : null;
-        $product->save();
+        $product->description = $data['description'] ?? null;
+        $product->characteristics = $data['characteristics'] ?? null;
 
-        if (isset(request()->photos)) {
+        if (!$product->save()) {
+            throw new \Exception("Product not saved");
+        };
+
+        if (request()->photos !== null) {
             $product->removePhotos();
             
             if (!$product->storePhotos(request()->photos)) {
@@ -94,6 +98,7 @@ class ProductController extends Controller
 
     /**
      * Stores new product into the DB
+     * @throws \Exception
      */
     public function store()
     {
@@ -127,6 +132,7 @@ class ProductController extends Controller
     /**
      * Deletes product
      * @param Product $product
+     * @throws \Exception
      */
     public function destroy(Product $product)
     {
@@ -134,7 +140,10 @@ class ProductController extends Controller
 
         $product->removeImage();
         $product->removePhotos();
-        $product->delete();
+        
+        if (!$product->delete()) {
+            throw new \Exception("Product not deleted");
+        }
 
         return redirect('/profile/' . auth()->user()->id);    
     }
