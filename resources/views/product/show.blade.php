@@ -79,7 +79,7 @@
                                     @endcan 
                                     @can('delete', $product)
                                         <div>
-                                            <a style="color:black" 
+                                            <a
                                                 href="{{ route('product.destroy', ['product' => $product]) }}"
                                                 onclick="event.preventDefault();
                                                 document.getElementById('delete-form-{{ $product->id }}').submit();">
@@ -98,13 +98,7 @@
                                 <img
                                     class="rounded-circle"
                                     style="width: 35%"
-                                    src="/storage/<?php
-                                        if (isset($product->user->profile->image)) {
-                                            echo $product->user->profile->image;
-                                        } else {
-                                            echo 'images/default.jpg';
-                                        }
-                                    ?>"
+                                    src={{ $product->user->profile->getImage() }}
                                     alt="image.png"
                                 >
                             </div>

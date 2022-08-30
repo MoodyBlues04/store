@@ -8,13 +8,7 @@
                 <div class="col-3">
                     <img
                         class="w-100 rounded-circle"
-                        src="/storage/<?php
-                            if (isset($user->profile->image)) {
-                                echo $user->profile->image;
-                            } else {
-                                echo 'profile/default.png';
-                            }
-                        ?>"
+                        src={{ $user->profile->getImage() }}
                         alt="image.png">
                 </div>
                 <div class="col-9">

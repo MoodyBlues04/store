@@ -50,6 +50,11 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getImage(): string
+    {
+        return '/storage/' . ($this->image ?? 'profile/default.png');
+    }
+
     /**
      * Removes old profile's image
      * @throws \Exception
