@@ -20,6 +20,8 @@ class Profile extends Model
 {
     use HasFactory;
 
+    public const STORAGE_PATH = __DIR__ . '/../../storage/app/public/';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -37,5 +39,19 @@ class Profile extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Removes old profile's image
+     * @return void
+     */
+    public function removeImage()
+    {
+        if (isset($this->image)) {
+            $path = self::STORAGE_PATH . $this->image;
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
     }
 }

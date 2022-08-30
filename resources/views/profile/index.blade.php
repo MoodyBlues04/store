@@ -12,7 +12,7 @@
                             if (isset($user->profile->image)) {
                                 echo $user->profile->image;
                             } else {
-                                echo 'images/default.jpg';
+                                echo 'profile/default.png';
                             }
                         ?>"
                         alt="image.png">

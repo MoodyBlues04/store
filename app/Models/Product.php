@@ -25,7 +25,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    const STORAGE_PATH = __DIR__ . '/../../storage/app/public/';
+    public const STORAGE_PATH = __DIR__ . '/../../storage/app/public/';
 
     /**
      * The attributes that are mass assignable.
@@ -105,7 +105,6 @@ class Product extends Model
 
     /**
      * Removes old image of current product
-     * @throws \Exception
      * @return void
      */
     public function removeImage()

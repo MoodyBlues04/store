@@ -31,16 +31,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * Validation rules for Profile model
-     * @var array<string,string[]> $valdationRules field => rules
-     */
-    protected $validationRules = [
-        'username' => ['required', 'string', 'max:20'],
-        'introduction' => ['required', 'string', 'max:500'],
-        'image' => ['image', 'mimes:jpg,jpeg,png'],
-    ];
-
-    /**
      * Updates profile's data
      * @param User $user
      */
@@ -48,21 +38,26 @@ class ProfileController extends Controller
     {
         $this->authorize('update', $user->profile);
 
-        $data = request()->validate($this->validationRules);
+        $data = request()->validate([
+            'username' => ['nullable', 'string', 'max:20'],
+            'introduction' => ['nullable', 'string', 'max:500'],
+            'image' => ['image', 'mimes:jpg,jpeg,png', 'nullable']
+        ]);
 
+        $imagePath = $user->profile->image;
         if (request('image') !== null) {
             $imagePath = $this->storeProfileImage(request('image'));
-
-            if (isset($user->profile->image)) {
-                unlink(__DIR__ . '/../../../storage/app/public/' . $user->profile->image);
-            }
-        } else {
-            $imagePath = $user->profile->image;
+            $user->profile->removeImage();
         }
 
-        $data['image'] = $imagePath;
+        $profile = auth()->user()->profile;
+        $profile->username = $data['username'] ?? $profile->username;
+        $profile->introduction = $data['introduction'] ?? $profile->introduction;
+        $profile->image = $imagePath;
 
-        auth()->user()->profile->update($data);
+        if (!$profile->save()) {
+            throw new \Exception("Profile not saved");
+        }
 
         return redirect("/profile/{$user->id}");
     }
@@ -72,12 +67,15 @@ class ProfileController extends Controller
      */
     public function store()
     {
-        $data = request()->validate($this->validationRules);
+        $data = request()->validate([
+            'username' => ['required', 'string', 'max:20'],
+            'introduction' => ['required', 'string', 'max:500'],
+            'image' => ['image', 'mimes:jpg,jpeg,png', 'nullable']
+        ]);
 
+        $imagePath = null;
         if (request('image') !== null) {
             $imagePath = $this->storeProfileImage(request('image'));
-        } else {
-            $imagePath = null;
         }
         
         auth()->user()->profile()->create([
