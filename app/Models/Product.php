@@ -18,12 +18,14 @@ use Intervention\Image\Facades\Image;
  * @property int $price
  * @property int $amount
  * @property string $image
- * @property dateTime $created_at
- * @property dateTime $updated_at
+ * @property string $created_at
+ * @property string $updated_at
  */
 class Product extends Model
 {
     use HasFactory;
+
+    const PHOTO_PATH = __DIR__ . '/../../storage/app/public/';
 
     /**
      * The attributes that are mass assignable.
@@ -81,7 +83,8 @@ class Product extends Model
 
     /**
      * Removes old photos of current product
-     * @return int|bool count of removed files | fail
+     * @return int count of removed files
+     * @throws \Exception
      */
     public function removeOldPhotos()
     {
@@ -89,12 +92,17 @@ class Product extends Model
         $count = 0;
         try {
             foreach ($productPhotos as $photo) {
-                unlink(__DIR__ . '/../../../storage/app/public/' . $photo->path);
-                $count++;
+                $path = self::PHOTO_PATH . $photo->path;
+                if (file_exists($path)) {
+                    unlink($path);
+                    $count++;
+                }
+                $photo->delete();
             }
-        } catch(\Exception) {
-            return false;
+        } catch(\Exception $exception) {
+            throw $exception;
         }
+
         
         return $count;
     }

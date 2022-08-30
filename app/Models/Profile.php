@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $username
  * @property string $introduction
  * @property string $image
- * @property dateTime $created_at
+ * @property string $created_at
  */
 class Profile extends Model
 {

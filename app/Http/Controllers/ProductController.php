@@ -30,21 +30,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Validation rules for Profile model
-     * @var array<string,string[]> $valdationRules field => rules
-     */
-    protected $validationRules = [
-        'name' => ['required', 'string', 'max:20'],
-        'price' => ['required', 'int'],
-        'amount' => ['required', 'int'],
-        'image' => ['required', 'image'],
-        'description' => ['string', 'max:500', 'nullable'],
-        'characteristics' => ['string', 'max:500', 'nullable'],
-        'photos' => 'required',
-        'photos.*' => 'mimes:jpg,jpeg,png',
-    ];
-
-    /**
      * Updates product's data
      * @param Product $product
      * @throws \Exception
@@ -52,28 +37,38 @@ class ProductController extends Controller
     public function update(Product $product)
     {
         $this->authorize('update', $product);
-        
-        ini_set('memory_limit', '16M');
 
-        $data = request()->validate($this->validationRules);
+        $data = request()->validate([
+            'name' => ['nullable', 'string', 'max:20'],
+            'price' => ['nullable', 'int'],
+            'amount' => ['nullable', 'int'],
+            'image' => ['nullable', 'image'],
+            'description' => ['string', 'max:500', 'nullable'],
+            'characteristics' => ['string', 'max:500', 'nullable'],
+            'photos' => 'nullable',
+            'photos.*' => 'mimes:jpg,jpeg,png',
+        ]);
 
-        $product->name = $data['name'];
-        $product->price = $data['price'];
-        $product->amount = $data['amount'];
-        $product->image = $this->storeProductImage(request('image'));
+        $imagePath = $product->image;
+        if (request('image') !== null) {
+            $imagePath = $this->storeProductImage(request('image'));
+        }
+
+        $product->name = isset($data['name']) ? $data['name'] : $product->name;
+        $product->price = isset($data['price']) ? $data['price'] : $product->price;
+        $product->amount = isset($data['amount']) ? $data['amount'] : $product->amount;
+        $product->image =  $imagePath;
         $product->description = isset($data['description']) ? $data['description'] : null;
         $product->characteristics = isset($data['characteristics']) ? $data['characteristics'] : null;
         $product->save();
 
         if (isset(request()->photos)) {
+            $product->removeOldPhotos();
+            
             if (!$product->storePhotos(request()->photos)) {
                 throw new \Exception("Product's photos not saved");
-            }
-
-            if (!$product->removeOldPhotos()) {
-                throw new \Exception("Old product's photos not deleted");
-            }
-        }        
+            }          
+        }  
 
         return redirect('/profile/' . auth()->user()->id);
     }
@@ -101,9 +96,16 @@ class ProductController extends Controller
      */
     public function store()
     {
-        $data = request()->validate($this->validationRules);
-
-        ini_set('memory_limit', '16M');
+        $data = request()->validate([
+            'name' => ['required', 'string', 'max:20'],
+            'price' => ['required', 'int'],
+            'amount' => ['required', 'int'],
+            'image' => ['required', 'image'],
+            'description' => ['string', 'max:500', 'nullable'],
+            'characteristics' => ['string', 'max:500', 'nullable'],
+            'photos' => 'required',
+            'photos.*' => 'mimes:jpg,jpeg,png',
+        ]);
 
         $product = auth()->user()->products()->create([
             'name' => $data['name'],

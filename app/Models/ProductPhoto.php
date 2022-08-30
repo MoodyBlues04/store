@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $product_id
  * @property string $path
+ * @property string $created_at
+ * @property string $updated_at
  */
 class ProductPhoto extends Model
 {

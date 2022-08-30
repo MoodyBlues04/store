@@ -7,8 +7,8 @@
             <form action="/product/{{ $product->id }}" enctype="multipart/form-data" method="post">
                 @csrf
                 @method('PATCH')
+                
                 <div class="row mb-3">
-
                     <h2> Edit product </h2>
 
                     <div class="pt-2">
