@@ -137,9 +137,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $this->authorize('delete', $product);
-
-        $product->removeImage();
-        $product->removePhotos();
         
         if (!$product->delete()) {
             throw new \Exception("Product not deleted");

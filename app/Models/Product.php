@@ -60,7 +60,8 @@ class Product extends Model
     public static function boot()
     {
         static::deleting(function ($product) {
-
+            $product->removeImage();
+            $product->removePhotos();
         });
     }
 
@@ -118,9 +119,6 @@ class Product extends Model
     public function removeImage()
     {
         $path = self::STORAGE_PATH . $this->image;
-        // if (!file_exists($path)) {
-        //     throw new \Exception("no such file or directory:" . $path);
-        // }
         if (file_exists($path)) {
             unlink($path);
         }
