@@ -33,7 +33,7 @@ class Profile extends Model
         'image',
     ];
 
-    public static function boot()
+    public static function booted()
     {
         static::deleting(function ($profile) {
             foreach ($profile->user->products as $product) {

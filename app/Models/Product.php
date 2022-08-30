@@ -57,7 +57,7 @@ class Product extends Model
         return $this->hasMany(ProductPhoto::class)->orderBy('created_at', 'DESC');
     }
 
-    public static function boot()
+    public static function booted()
     {
         static::deleting(function ($product) {
             $product->removeImage();

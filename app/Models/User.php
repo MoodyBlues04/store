@@ -55,13 +55,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function boot()
+    public static function booted()
     {
-        static::created(function ($user) {
+        static::created(function (\App\Models\User $user) {
             $user->profile()->create();
         });
 
-        static::deleting(function ($user) {
+        static::deleting(function (\App\Models\User $user) {
             $user->profile()->delete();
         });
     }
