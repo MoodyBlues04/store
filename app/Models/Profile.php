@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Profile
@@ -53,9 +54,20 @@ class Profile extends Model
     /**
      * Returns users, who have rated the seller
      */
-    public function rewievers()
+    public function rating()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Returns profile's rating
+     * @return int
+     */
+    public function getRating(): int
+    {
+        return Profile::join('ratings', 'ratings.profile_id', '=', 'profile.id')
+            ->where('profile.id', $this->id)
+            ->select(DB::raw('SUM(ratings.rating) / COUNT(ratings.rating) as rating'))->pluck('rating');
     }
 
     /**
