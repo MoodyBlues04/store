@@ -17,9 +17,7 @@
                         
                         {{-- vue component --}}
 
-                        <rate-button :users="{!! $users->toJson() !!}"></rate-button>
-
-                        <rate-button></rate-button>
+                        <rate-button user-id="{{ $user->id }}"></rate-button>
                     </div>
 
                     <div>
