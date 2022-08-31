@@ -12,8 +12,10 @@
                         alt="image.png">
                 </div>
                 <div class="col-9">
-                    <div>
+                    <div class="d-flex justify-content-between align-items-center">
                         <h1>{{ $user->profile->username ?? "Enter username" }}</h1>
+                        
+                        <rate-button></rate-button>
                     </div>
 
                     <div>
