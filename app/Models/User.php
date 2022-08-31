@@ -12,11 +12,13 @@ use Laravel\Sanctum\HasApiTokens;
  * Class User
  * @package App\Models
  * 
- * @property int $id
+ * @property    int $id
  * @property string $name
  * @property string $phone
  * @property string $email
  * @property string $password
+ * @property string $created_at
+ * @property string $updated_at
  */
 class User extends Authenticatable
 {
@@ -26,8 +28,7 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * @var string[]
      */
     protected $fillable = [
         'name',
@@ -38,8 +39,7 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * @var string[]
      */
     protected $hidden = [
         'password',
@@ -48,7 +48,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be cast.
-     *
      * @var array<string, string>
      */
     protected $casts = [
@@ -80,5 +79,13 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class)->orderBy('created_at', 'DESC');
+    }
+
+    /**
+     * Returns rated profiles
+     */
+    public function rated()
+    {
+        return $this->belongsToMany(Profile::class);
     }
 }

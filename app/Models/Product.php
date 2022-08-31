@@ -10,13 +10,13 @@ use Intervention\Image\Facades\Image;
  * Class Product
  * @package App\Models
  * 
- * @property int $id
- * @property int $user_id
+ * @property    int $id
+ * @property    int $user_id
  * @property string $name
  * @property string $description
  * @property string $characteristics
- * @property int $price
- * @property int $amount
+ * @property    int $price
+ * @property    int $amount
  * @property string $image
  * @property string $created_at
  * @property string $updated_at
@@ -29,8 +29,7 @@ class Product extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * @var string[]
      */
     protected $fillable = [
         'name',

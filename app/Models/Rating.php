@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class ProductPhoto
- * @package App\MOdels
+ * Class Rating
+ * @package App\Models
  * 
  * @property    int $id
- * @property    int $product_id
- * @property string $path
+ * @property    int $user_id
+ * @property    int $profile_id
+ * @property    int $value
  * @property string $created_at
  * @property string $updated_at
  */
-class ProductPhoto extends Model
+class Rating extends Model
 {
     use HasFactory;
 
@@ -24,14 +25,24 @@ class ProductPhoto extends Model
      * @var string[]
      */
     protected $fillable = [
-        'path',
+        'user_id',
+        'profile_id',
+        'value',
     ];
 
     /**
      * Defines dependencies
      */
-    public function product()
+    public function user()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Defines dependencies
+     */
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class);
     }
 }

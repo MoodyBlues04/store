@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  * Class Profile
  * @package App\Models
  * 
- * @property int $id
- * @property int $user_id
+ * @property    int $id
+ * @property    int $user_id
  * @property string $username
  * @property string $introduction
  * @property string $image
  * @property string $created_at
+ * @property string $updated_at
  */
 class Profile extends Model
 {
@@ -24,8 +25,7 @@ class Profile extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * @var string[]
      */
     protected $fillable = [
         'username',
@@ -50,6 +50,18 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Returns users, who have rated the seller
+     */
+    public function rewievers()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    /**
+     * Returns profile's image path
+     * @return string
+     */
     public function getImage(): string
     {
         return '/storage/' . ($this->image ?? 'profile/default.png');
