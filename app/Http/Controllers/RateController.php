@@ -10,8 +10,9 @@ class RateController extends Controller
     /**
      * Stores profile's rating
      */
-    public function store(User $user)
+    public function store()
     {
+        return [var_dump(request())];
         // TODO переделать на передачу profile->id в request, чтобы соотв http-controllers и не было аргументов
         return auth()->user()->rated()->create([
             'profile_id' => $user->profile->id,

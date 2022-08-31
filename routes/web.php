@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RateController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Hash;
 
@@ -41,15 +42,5 @@ Route::get('/product', ProductController::class . '@index')->name('product.index
 Route::post('/product', ProductController::class . '@store')->name('product.store');
 Route::delete('/product/{product}', ProductController::class . '@destroy')->name('product.destroy');
 
-// test routes
-Route::get('/test-hash/{password}', function($password) {
-    dd(Hash::make($password));
-});
-Route::get('/test-hash-check/{password}', function($password) {
-    dd(Hash::check($password, '$2y$10$KJQyjivNrXdSJ3HlgfDMgemzuF7TjJH321eU/aLC2BCT1NW40TMwS'));
-});
-Route::get('/test', function() {
-    $obj = new \App\Models\User();
-    var_dump(get_class($obj));
-    exit;
-});
+// rate routes
+Route::post('/rate', RateController::class . '@store')->name('rate.store');

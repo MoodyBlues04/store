@@ -15,6 +15,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h1>{{ $user->profile->username ?? "Enter username" }}</h1>
                         
+                        {{-- vue component --}}
+
+                        <rate-button :users="{!! $users->toJson() !!}"></rate-button>
+
                         <rate-button></rate-button>
                     </div>
 
