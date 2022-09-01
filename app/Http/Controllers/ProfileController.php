@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rating;
 use App\Models\User;
 use Intervention\Image\Facades\Image;
 
@@ -15,7 +16,17 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        return view('profile.index', compact('user'));
+        $rate = Rating::where('user_id', auth()->user()->id)
+            ->where('profile_id', $user->profile->id)
+            ->get();
+
+        
+        if (!isset($rate->value)) {
+            $value = false;
+        } else {
+            $value = $rate->value ?? false;
+        }
+        return view('profile.show', compact('user', 'value'));
     }
 
     /**

@@ -17,7 +17,7 @@
                         
                         {{-- vue component --}}
 
-                        <rate-button user-id="{{ $user->id }}"></rate-button>
+                        <rate-button user-id="{{ $user->id }}" value="{{ $value }}"></rate-button>
                     </div>
 
                     <div>

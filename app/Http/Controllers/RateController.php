@@ -17,21 +17,30 @@ class RateController extends Controller
         if (request('user') === null) {
             throw new \Exception("Unset user error");
         }
-        if (request('value') === null) {
-            throw new \Exception("Unset value error");
-        }
+        $value = request('value');
         
         $user = User::findOrFail(request('user'));
+
+        $userId = auth()->user()->id;
+        $profileId = $user->profile->id;
+
+        $rating = Rating::where('user_id', auth()->user()->id)
+            ->where('profile_id', $user->profile->id)
+            ->get();
+        
+        if (isset($rating->value)) {
+            $rating->delete();
+        }
         
         $rating = new Rating();
-        $rating->user_id = auth()->user()->id;
-        $rating->profile_id = $user->profile->id;
-        $rating->value = request('value');
+        $rating->user_id = $userId;
+        $rating->profile_id = $profileId;
+        $rating->value = $value;
         
         if (!$rating->save()) {
             throw new \Exception("Rating not saved");
         }
         
-        return ["successfully created $rating->id"];
+        return [$value];
     }
 }
