@@ -31,6 +31,10 @@ class RateController extends Controller
             $rating->delete();
         }
         
+        if ($value === -1) {
+            return false;
+        }
+        
         $rating = new Rating();
         $rating->user_id = $userId;
         $rating->profile_id = $profileId;
