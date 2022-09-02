@@ -60,17 +60,6 @@ class Profile extends Model
     }
 
     /**
-     * Returns profile's rating
-     * @return int
-     */
-    public function getRating(): int
-    {
-        return Profile::join('ratings', 'ratings.profile_id', '=', 'profile.id')
-            ->where('profile.id', $this->id)
-            ->select(DB::raw('SUM(ratings.rating) / COUNT(ratings.rating) as rating'))->pluck('rating');
-    }
-
-    /**
      * Returns profile's image path
      * @return string
      */

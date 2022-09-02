@@ -21,8 +21,9 @@ class ProfileController extends Controller
             ->first();
 
         $value = $rate->value ?? false;
+        $avgValue = Rating::getAvgValueByProfileId($user->profile->id);
         
-        return view('profile.show', compact('user', 'value'));
+        return view('profile.show', compact('user', 'value', 'avgValue'));
     }
 
     /**

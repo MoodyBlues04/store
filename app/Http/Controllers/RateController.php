@@ -24,7 +24,7 @@ class RateController extends Controller
         $profileId = $user->profile->id;
 
         $rating = Rating::where('user_id', auth()->user()->id)
-            ->where('profile_id', $user->profile->id)
+            ->where('profile_id', $profileId)
             ->first();
         
         if (isset($rating->value)) {
@@ -35,6 +35,7 @@ class RateController extends Controller
             return false;
         }
         
+
         $rating = new Rating();
         $rating->user_id = $userId;
         $rating->profile_id = $profileId;
@@ -44,6 +45,8 @@ class RateController extends Controller
             throw new \Exception("Rating not saved");
         }
         
-        return [$value];
+        $avgValue = Rating::getAvgValueByProfileId($profileId);
+        
+        return [$value, $avgValue];
     }
 }

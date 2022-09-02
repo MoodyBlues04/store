@@ -1,11 +1,15 @@
 <template>
     <div>
-        <button class="btn btn-primary" @click="rateUser(1)" v-text="buttonText1"></button>
-        <button class="btn btn-primary" @click="rateUser(2)" v-text="buttonText2"></button>
-        <button class="btn btn-primary" @click="rateUser(3)" v-text="buttonText3"></button>
-        <button class="btn btn-primary" @click="rateUser(4)" v-text="buttonText4"></button>
-        <button class="btn btn-primary" @click="rateUser(5)" v-text="buttonText5"></button>
-        <button class="btn btn-secondary" @click="rateUser(-1)">X</button>
+        <div>
+            <button class="btn btn-primary" @click="rateUser(1)" v-text="buttonText1"></button>
+            <button class="btn btn-primary" @click="rateUser(2)" v-text="buttonText2"></button>
+            <button class="btn btn-primary" @click="rateUser(3)" v-text="buttonText3"></button>
+            <button class="btn btn-primary" @click="rateUser(4)" v-text="buttonText4"></button>
+            <button class="btn btn-primary" @click="rateUser(5)" v-text="buttonText5"></button>
+            <button class="btn btn-secondary" @click="rateUser(-1)">X</button>
+        </div>
+
+        <p v-text="avgFunc"></p>
     </div>
 </template>
 
@@ -16,7 +20,8 @@ import axios from 'axios';
     export default {
         props: [
             'userId',
-            'value'
+            'value',
+            'avgValue'
         ],
 
         mounted() {
@@ -26,6 +31,7 @@ import axios from 'axios';
         data: function () {
             return {
                 status: this.value,
+                avg: this.avgValue
             }
         },
         
@@ -36,16 +42,22 @@ import axios from 'axios';
                     value: num
                 })
                 .then(response => {
-                    this.status = response.data;
-                    
+                    this.status = response.data[0];
+                    this.avg = response.data[1];
+
                     // this.status = 1;
-                    // console.log(response.data);
+                    console.log(response.data);
                 });
             }
         },
 
         // very bad in JS :(
         computed: {
+
+            avgFunc() {
+                return this.avg;
+            },
+
             buttonText1() {
                 if (!this.status || this.status < 1) {
                     return '0';

@@ -14,12 +14,15 @@
                 <div class="col-9">
                     <div class="d-flex justify-content-between align-items-center">
                         <h1>{{ $user->profile->username ?? "Enter username" }}</h1>
-                        
+
                         {{-- vue component --}}
-
-                        <rate-button user-id="{{ $user->id }}" value="{{ $value }}"></rate-button>
+                        <rate-button
+                            user-id="{{ $user->id }}"
+                            value="{{ $value }}"
+                            avg-value="{{ $avgValue }}"
+                        ></rate-button>
                     </div>
-
+                    
                     <div>
                         <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
                     </div>
