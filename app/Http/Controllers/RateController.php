@@ -32,7 +32,8 @@ class RateController extends Controller
         }
         
         if ($value === -1) {
-            return false;
+            $avgValue = Rating::getAvgValueByProfileId($profileId);
+            return [false, $avgValue];
         }
         
 
@@ -44,7 +45,7 @@ class RateController extends Controller
         if (!$rating->save()) {
             throw new \Exception("Rating not saved");
         }
-        
+
         $avgValue = Rating::getAvgValueByProfileId($profileId);
         
         return [$value, $avgValue];
