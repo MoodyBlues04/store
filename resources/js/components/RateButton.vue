@@ -9,7 +9,7 @@
             <button class="btn btn-secondary" @click="rateUser(-1)">X</button>
         </div>
 
-        <p v-text="avgFunc"></p>
+        <p class="w-100 text-center pt-2" v-text="avgFunc"></p>
     </div>
 </template>
 
@@ -45,8 +45,7 @@ import axios from 'axios';
                     this.status = response.data[0];
                     this.avg = response.data[1];
 
-                    // this.status = 1;
-                    console.log(response.data);
+                    // console.log(response.data);
                 });
             }
         },
