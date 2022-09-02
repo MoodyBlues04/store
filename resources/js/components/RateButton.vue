@@ -36,8 +36,9 @@ import axios from 'axios';
                 })
                 .then(response => {
                     this.status = response.data;
+                    // this.status = 1;
 
-                    // alert(response.data);
+                    console.log(response.data);
                 });
             }
         },

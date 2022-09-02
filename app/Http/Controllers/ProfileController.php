@@ -18,14 +18,10 @@ class ProfileController extends Controller
     {
         $rate = Rating::where('user_id', auth()->user()->id)
             ->where('profile_id', $user->profile->id)
-            ->get();
+            ->first();
 
+        $value = $rate->value ?? false;
         
-        if (!isset($rate->value)) {
-            $value = false;
-        } else {
-            $value = $rate->value ?? false;
-        }
         return view('profile.show', compact('user', 'value'));
     }
 

@@ -18,7 +18,6 @@ class RateController extends Controller
             throw new \Exception("Unset user error");
         }
         $value = request('value');
-        
         $user = User::findOrFail(request('user'));
 
         $userId = auth()->user()->id;
@@ -26,7 +25,7 @@ class RateController extends Controller
 
         $rating = Rating::where('user_id', auth()->user()->id)
             ->where('profile_id', $user->profile->id)
-            ->get();
+            ->first();
         
         if (isset($rating->value)) {
             $rating->delete();
