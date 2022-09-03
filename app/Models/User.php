@@ -56,11 +56,11 @@ class User extends Authenticatable
 
     public static function booted()
     {
-        static::created(function (\App\Models\User $user) {
+        static::created(function (User $user) {
             $user->profile()->create();
         });
 
-        static::deleting(function (\App\Models\User $user) {
+        static::deleting(function (User $user) {
             $user->profile()->delete();
         });
     }

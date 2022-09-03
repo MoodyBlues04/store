@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Repository\ProductRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Intervention\Image\Facades\Image;
@@ -57,8 +58,9 @@ class Product extends Model
     public static function booted()
     {
         static::deleting(function ($product) {
-            $product->removeImage();
-            $product->removePhotos();
+            $repository = new ProductRepository();
+            $repository->removeImageById($product->id);
+            $repository->removePhotosById($product->id);
         });
     }
 }

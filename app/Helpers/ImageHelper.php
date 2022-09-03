@@ -9,10 +9,6 @@ use Intervention\Image\Facades\Image;
 
 class ImageHelper
 {
-    
-    /**
-     * Stores and resize an image
-     */
     public static function storeProfileImage(UploadedFile $image): string
     {
         $imagePath = $image->store('profile', 'public');

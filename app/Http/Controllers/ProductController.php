@@ -128,10 +128,10 @@ class ProductController extends Controller
             'amount' => $data['amount'],
             'description' => isset($data['description']) ? $data['description'] : null,
             'characteristics' => isset($data['characteristics']) ? $data['characteristics'] : null,
-            'image' => $this->storeProductImage(request('image'))
+            'image' => ImageHelper::storeProductImage(request('image'))
         ]);
 
-        if (!$product->storePhotos(request()->photos)) {
+        if (!$this->productRepository->storePhotosById($product->id, request()->photos)) {
             throw new \Exception("Product's photos not saved");
         }
 

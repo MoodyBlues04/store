@@ -8,11 +8,6 @@ use App\Models\Rating;
 
 class RatingRepository
 {
-    /**
-     * Gets profile's avg rating
-     * @param int $profileId
-     * @return float|null
-     */
     public function getAvgValueByProfileId(int $profileId): ?float
     {
         $ratings = Rating::where('profile_id', $profileId)->get();

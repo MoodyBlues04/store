@@ -38,8 +38,13 @@ class ProfileController extends Controller
             return view('profile.show', compact('user', 'avgValue'));
         }
 
-        $rating = $this->ratingRepository->getRatingByUserAndProfile(auth()->user()->id, $user->profile_id);
-        $value = $rating->value ?? false; 
+        if (auth()->user()->id !== null && $user->profile->id !== null) {
+            $rating = $this->ratingRepository->getRatingByUserAndProfile(auth()->user()->id, $user->profile->id);
+            $value = $rating->value ?? false; 
+        } else {
+            $value = false;
+        }
+       
         
         return view('profile.show', compact('user', 'value', 'avgValue'));
     }
@@ -73,7 +78,7 @@ class ProfileController extends Controller
         $imagePath = $user->profile->image;
         if (request('image') !== null) {
             $imagePath = ImageHelper::storeProfileImage(request('image'));
-            $this->profileRepository->removeImageById($user->profile_id);
+            $this->profileRepository->removeImageById($user->profile->id);
         }
 
         $profile = auth()->user()->profile;
