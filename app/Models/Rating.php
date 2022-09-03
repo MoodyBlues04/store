@@ -45,21 +45,4 @@ class Rating extends Model
     {
         return $this->belongsTo(Profile::class);
     }
-
-    /**
-     * Gets profile's avg rating
-     * @param int $profileId
-     * @return float|null
-     */
-    public static function getAvgValueByProfileId(int $profileId): ?float
-    {
-        $ratings = Rating::where('profile_id', $profileId)->get();
-        $sum = $ratings->sum('value');
-        $count = $ratings->count();
-        
-        if ($count === 0) {
-            return null;
-        }
-        return $sum / $count; 
-    }
 }

@@ -1,14 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Rating;
 use App\Models\User;
+use App\Repository\RatingRepository;
 use Intervention\Image\Facades\Image;
 
 
 class ProfileController extends Controller
 {
+    private RatingRepository $ratingRepository;
+
+    public function __construct(RatingRepository $ratingRepository)
+    {
+        $this->ratingRepository = $ratingRepository;
+    }
+
     /**
      * Shows user's profile
      * @param User $user
@@ -16,16 +26,14 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $avgValue = Rating::getAvgValueByProfileId($user->profile->id);
-        
+        $avgValue = $this->ratingRepository->getAvgValueByProfileId($user->profile->id);
+
         if (auth()->user() === null) {
             return view('profile.show', compact('user', 'avgValue'));
         }
 
-        $rate = Rating::where('user_id', auth()->user()->id)
-            ->where('profile_id', $user->profile->id)
-            ->first();
-        $value = $rate->value ?? false; 
+        $rating = $this->ratingRepository->getRatingByUserAndProfile(auth()->user()->id, $user->profile_id);
+        $value = $rating->value ?? false; 
         
         return view('profile.show', compact('user', 'value', 'avgValue'));
     }
@@ -50,7 +58,7 @@ class ProfileController extends Controller
     {
         $this->authorize('update', $user->profile);
 
-        $data = request()->validate([
+        $data = request()->validate([ // TODO перенести подобную валидацию в
             'username' => ['nullable', 'string', 'max:20'],
             'introduction' => ['nullable', 'string', 'max:500'],
             'image' => ['image', 'mimes:jpg,jpeg,png', 'nullable']
@@ -97,19 +105,5 @@ class ProfileController extends Controller
         ]);        
 
         return redirect('/profile/' . auth()->user()->id);
-    }
-
-    /**
-     * Stores and resize an image
-     * @param UploadedFile $image
-     * @return string
-     */
-    public function storeProfileImage($image)
-    {
-        $imagePath = $image->store('profile', 'public');
-        $img = Image::make(public_path("storage/{$imagePath}"))->resize(500, 500);
-        $img->save();
-
-        return $imagePath;
     }
 }
