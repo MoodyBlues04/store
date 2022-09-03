@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
+use App\Http\Requests\ProfileStoreRequest;
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Rating;
 use App\Models\User;
 use App\Repository\ProfileRepository;
@@ -27,8 +29,6 @@ class ProfileController extends Controller
 
     /**
      * Shows user's profile
-     * @param User $user
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function show(User $user)
     {
@@ -38,21 +38,14 @@ class ProfileController extends Controller
             return view('profile.show', compact('user', 'avgValue'));
         }
 
-        if (auth()->user()->id !== null && $user->profile->id !== null) {
-            $rating = $this->ratingRepository->getRatingByUserAndProfile(auth()->user()->id, $user->profile->id);
-            $value = $rating->value ?? false; 
-        } else {
-            $value = false;
-        }
-       
-        
+        $rating = $this->ratingRepository->getRatingByUserAndProfile(auth()->user()->id, $user->profile->id);
+        $value = $rating->value ?? false; 
+
         return view('profile.show', compact('user', 'value', 'avgValue'));
     }
 
     /**
      * Edits user's profile
-     * @param User $user
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function edit(User $user)
     {
@@ -63,17 +56,10 @@ class ProfileController extends Controller
 
     /**
      * Updates profile's data
-     * @param User $user
      */
-    public function update(User $user)
+    public function update(ProfileUpdateRequest $request, User $user)
     {
         $this->authorize('update', $user->profile);
-
-        $data = request()->validate([ // TODO перенести подобную валидацию в
-            'username' => ['nullable', 'string', 'max:20'],
-            'introduction' => ['nullable', 'string', 'max:500'],
-            'image' => ['image', 'mimes:jpg,jpeg,png', 'nullable']
-        ]);
 
         $imagePath = $user->profile->image;
         if (request('image') !== null) {
@@ -82,8 +68,8 @@ class ProfileController extends Controller
         }
 
         $profile = auth()->user()->profile;
-        $profile->username = $data['username'] ?? $profile->username;
-        $profile->introduction = $data['introduction'] ?? $profile->introduction;
+        $profile->username = $request['username'] ?? $profile->username;
+        $profile->introduction = $request['introduction'] ?? $profile->introduction;
         $profile->image = $imagePath;
 
         if (!$profile->save()) {
@@ -96,22 +82,16 @@ class ProfileController extends Controller
     /**
      * Stores new product into the DB
      */
-    public function store()
+    public function store(ProfileStoreRequest $request)
     {
-        $data = request()->validate([
-            'username' => ['required', 'string', 'max:20'],
-            'introduction' => ['required', 'string', 'max:500'],
-            'image' => ['image', 'mimes:jpg,jpeg,png', 'nullable']
-        ]);
-
         $imagePath = null;
         if (request('image') !== null) {
             $imagePath = ImageHelper::storeProfileImage(request('image'));
         }
         
         auth()->user()->profile()->create([
-            'username' => $data['username'],
-            'introduction' => $data['introduction'],
+            'username' => $request['username'],
+            'introduction' => $request['introduction'],
             'image' => $imagePath,
         ]);        
 
