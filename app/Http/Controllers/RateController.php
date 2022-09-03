@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Rating;
 use App\Models\User;
+use App\Repository\RatingRepository;
 use Illuminate\Http\Request;
 
 class RateController extends Controller
 {
-    public function __construct()
+    private RatingRepository $ratingRepository;
+
+    public function __construct(RatingRepository $ratingRepository)
     {
         $this->middleware('auth');
+        
+        $this->ratingRepository = $ratingRepository;
     }
+
     /**
      * Stores profile's rating
      * @throws \Exception
@@ -21,22 +27,19 @@ class RateController extends Controller
         if (request('user') === null) {
             throw new \Exception("Unset user error");
         }
-        $value = request('value');
-        $user = User::findOrFail(request('user'));
 
         $userId = auth()->user()->id;
+        $value = request('value');
+        $user = User::findOrFail(request('user'));
         $profileId = $user->profile->id;
 
-        $rating = Rating::where('user_id', auth()->user()->id)
-            ->where('profile_id', $profileId)
-            ->first();
-        
+        $rating = $this->ratingRepository->getRatingByUserAndProfile($userId, $profileId);
         if (isset($rating->value)) {
             $rating->delete();
         }
         
         if ($value === -1) {
-            $avgValue = Rating::getAvgValueByProfileId($profileId);
+            $avgValue = $this->ratingRepository->getAvgValueByProfileId($profileId);
             return [false, $avgValue];
         }
         
@@ -50,7 +53,7 @@ class RateController extends Controller
             throw new \Exception("Rating not saved");
         }
 
-        $avgValue = Rating::getAvgValueByProfileId($profileId);
+        $avgValue = $this->ratingRepository->getAvgValueByProfileId($profileId);
         
         return [$value, $avgValue];
     }

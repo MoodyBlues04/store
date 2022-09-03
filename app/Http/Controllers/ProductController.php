@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Models\Product;
 use App\Models\ProductPhoto;
 use App\Models\User;
+use App\Repository\ProductRepository;
 use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
+    private ProductRepository $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     /**
      * Creates product
      */
@@ -38,7 +47,7 @@ class ProductController extends Controller
     {
         $this->authorize('update', $product);
 
-        $data = request()->validate([
+        $data = request()->validate([ // TODO тоже request
             'name' => ['nullable', 'string', 'max:20'],
             'price' => ['nullable', 'int'],
             'amount' => ['nullable', 'int'],
@@ -51,8 +60,8 @@ class ProductController extends Controller
 
         $imagePath = $product->image;
         if (request('image') !== null) {
-            $product->removeImage();
-            $imagePath = $this->storeProductImage(request('image'));
+            $this->productRepository->removeImageById($product->id);
+            $imagePath = ImageHelper::storeProductImage(request('image'));
         }
 
         $product->name = $data['name'] ?? $product->name;
@@ -70,7 +79,7 @@ class ProductController extends Controller
         if (request()->photos !== null) {
             $product->removePhotos();
             
-            if (!$product->storePhotos(request()->photos)) {
+            if (!$this->productRepository->storePhotosById($product->id, request()->photos)) {
                 throw new \Exception("Product's photos not saved");
             }          
         }  
@@ -92,7 +101,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('created_at', 'DESC')->get();
+        $products = $this->productRepository->getDescOrdered();
         return view('product.index', compact('products'));
     }
 
@@ -143,19 +152,5 @@ class ProductController extends Controller
         }
 
         return redirect('/profile/' . auth()->user()->id);    
-    }
-
-    /**
-     * Stores and resize an image
-     * @param UploadedFile $image
-     * @return string
-     */
-    public function storeProductImage($image)
-    {
-        $imagePath = $image->store('product_images', 'public');
-        $img = Image::make(public_path("storage/{$imagePath}"))->resize(610, 350);
-        $img->save();
-
-        return $imagePath;
     }
 }

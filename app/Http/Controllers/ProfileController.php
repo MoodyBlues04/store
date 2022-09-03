@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Models\Rating;
 use App\Models\User;
+use App\Repository\ProfileRepository;
 use App\Repository\RatingRepository;
-use Intervention\Image\Facades\Image;
 
 
 class ProfileController extends Controller
 {
     private RatingRepository $ratingRepository;
 
-    public function __construct(RatingRepository $ratingRepository)
-    {
+    private ProfileRepository $profileRepository;
+
+    public function __construct(
+        RatingRepository $ratingRepository,
+        ProfileRepository $profileRepository
+    ) {
         $this->ratingRepository = $ratingRepository;
+        $this->profileRepository = $profileRepository;
     }
 
     /**
@@ -66,8 +72,8 @@ class ProfileController extends Controller
 
         $imagePath = $user->profile->image;
         if (request('image') !== null) {
-            $imagePath = $this->storeProfileImage(request('image'));
-            $user->profile->removeImage();
+            $imagePath = ImageHelper::storeProfileImage(request('image'));
+            $this->profileRepository->removeImageById($user->profile_id);
         }
 
         $profile = auth()->user()->profile;
@@ -95,7 +101,7 @@ class ProfileController extends Controller
 
         $imagePath = null;
         if (request('image') !== null) {
-            $imagePath = $this->storeProfileImage(request('image'));
+            $imagePath = ImageHelper::storeProfileImage(request('image'));
         }
         
         auth()->user()->profile()->create([

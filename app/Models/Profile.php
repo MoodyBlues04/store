@@ -22,8 +22,6 @@ class Profile extends Model
 {
     use HasFactory;
 
-    public const STORAGE_PATH = __DIR__ . '/../../storage/app/public/';
-
     /**
      * The attributes that are mass assignable.
      * @var string[]
@@ -66,21 +64,5 @@ class Profile extends Model
     public function getImage(): string
     {
         return '/storage/' . ($this->image ?? 'profile/default.png');
-    }
-
-    /**
-     * Removes old profile's image
-     * @throws \Exception
-     * @return void
-     */
-    public function removeImage()
-    {
-        if (isset($this->image)) {
-            $path = self::STORAGE_PATH . $this->image;
-            if (!file_exists($path)) {
-                throw new \Exception("no such file or directory:" . $path);
-            }
-            unlink($path);
-        }
     }
 }
