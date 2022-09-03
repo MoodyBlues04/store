@@ -16,12 +16,16 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        $avgValue = Rating::getAvgValueByProfileId($user->profile->id);
+        
+        if (auth()->user() === null) {
+            return view('profile.show', compact('user', 'avgValue'));
+        }
+
         $rate = Rating::where('user_id', auth()->user()->id)
             ->where('profile_id', $user->profile->id)
             ->first();
-
-        $value = $rate->value ?? false;
-        $avgValue = Rating::getAvgValueByProfileId($user->profile->id);
+        $value = $rate->value ?? false; 
         
         return view('profile.show', compact('user', 'value', 'avgValue'));
     }

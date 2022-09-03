@@ -46,6 +46,11 @@ import axios from 'axios';
                     this.avg = response.data[1];
 
                     // console.log(response.data);
+                })
+                .catch(errors => {
+                    if (errors.data.status == 401) {
+                        window.location = '/login';
+                    }
                 });
             }
         },

@@ -16,11 +16,18 @@
                         <h1>{{ $user->profile->username ?? "Enter username" }}</h1>
 
                         {{-- vue component --}}
-                        <rate-button
-                            user-id="{{ $user->id }}"
-                            value="{{ $value }}"
-                            avg-value="{{ $avgValue }}"
-                        ></rate-button>
+                        @if (Auth::check() && Auth::user()->id !== $user->id)
+                            <rate-button
+                                user-id="{{ $user->id }}"
+                                value="{{ $value }}"
+                                avg-value="{{ $avgValue }}"
+                            ></rate-button>
+                        @else
+                            <div class="pt-3">
+                                <p style="font-size: 120%">{{ $avgValue }}</p>
+                            </div>
+                        @endif
+                        
                     </div>
                     
                     <div>
