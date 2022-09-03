@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductPhoto;
 use App\Models\User;
 use App\Repository\ProductRepository;
+use Illuminate\Http\Client\Request;
 use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
@@ -28,8 +31,6 @@ class ProductController extends Controller
 
     /**
      * Edits product's info
-     * @param Product $product
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function edit(Product $product)
     {
@@ -40,23 +41,11 @@ class ProductController extends Controller
 
     /**
      * Updates product's data
-     * @param Product $product
      * @throws \Exception
      */
-    public function update(Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
         $this->authorize('update', $product);
-
-        $data = request()->validate([ // TODO тоже request
-            'name' => ['nullable', 'string', 'max:20'],
-            'price' => ['nullable', 'int'],
-            'amount' => ['nullable', 'int'],
-            'image' => ['nullable', 'image'],
-            'description' => ['string', 'max:500', 'nullable'],
-            'characteristics' => ['string', 'max:500', 'nullable'],
-            'photos' => 'nullable',
-            'photos.*' => 'mimes:jpg,jpeg,png',
-        ]);
 
         $imagePath = $product->image;
         if (request('image') !== null) {
@@ -64,12 +53,12 @@ class ProductController extends Controller
             $imagePath = ImageHelper::storeProductImage(request('image'));
         }
 
-        $product->name = $data['name'] ?? $product->name;
-        $product->price = $data['price'] ?? $product->price;
-        $product->amount = $data['amount'] ?? $product->amount;
+        $product->name = $request['name'] ?? $product->name;
+        $product->price = $request['price'] ?? $product->price;
+        $product->amount = $request['amount'] ?? $product->amount;
         $product->image =  $imagePath;
-        $product->description = $data['description'] ?? null;
-        $product->characteristics = $data['characteristics'] ?? null;
+        $product->description = $request['description'] ?? null;
+        $product->characteristics = $request['characteristics'] ?? null;
 
 
         if (!$product->save()) {
@@ -89,7 +78,6 @@ class ProductController extends Controller
 
     /**
      * Shows product page
-     * @param Product $product
      */
     public function show(Product $product)
     {
@@ -109,25 +97,14 @@ class ProductController extends Controller
      * Stores new product into the DB
      * @throws \Exception
      */
-    public function store()
+    public function store(ProductStoreRequest $request)
     {
-        $data = request()->validate([
-            'name' => ['required', 'string', 'max:20'],
-            'price' => ['required', 'int'],
-            'amount' => ['required', 'int'],
-            'image' => ['required', 'image'],
-            'description' => ['string', 'max:500', 'nullable'],
-            'characteristics' => ['string', 'max:500', 'nullable'],
-            'photos' => 'required',
-            'photos.*' => 'mimes:jpg,jpeg,png',
-        ]);
-
         $product = auth()->user()->products()->create([
-            'name' => $data['name'],
-            'price' => $data['price'],
-            'amount' => $data['amount'],
-            'description' => isset($data['description']) ? $data['description'] : null,
-            'characteristics' => isset($data['characteristics']) ? $data['characteristics'] : null,
+            'name' => $request['name'],
+            'price' => $request['price'],
+            'amount' => $request['amount'],
+            'description' => $request['description'] ?? null,
+            'characteristics' => $request['characteristics'] ?? null,
             'image' => ImageHelper::storeProductImage(request('image'))
         ]);
 
