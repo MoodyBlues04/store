@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RatingStoreRequest;
 use App\Models\Rating;
 use App\Models\User;
 use App\Repository\RatingRepository;
 use Illuminate\Http\Request;
 
-class RateController extends Controller
+class RatingController extends Controller
 {
     private RatingRepository $ratingRepository;
 
@@ -22,15 +23,11 @@ class RateController extends Controller
      * Stores profile's rating
      * @throws \Exception
      */
-    public function store()
+    public function store(RatingStoreRequest $request)
     {
-        if (request('user') === null) {
-            throw new \Exception("Unset user error");
-        }
-
         $userId = auth()->user()->id;
-        $value = request('value');
-        $user = User::findOrFail(request('user'));
+        $value = $request['value'];
+        $user = $request->getUserModel();
         $profileId = $user->profile->id;
 
         $rating = $this->ratingRepository->getRatingByUserAndProfile($userId, $profileId);

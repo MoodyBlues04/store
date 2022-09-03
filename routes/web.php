@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\RateController;
-use App\Models\Product;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +41,4 @@ Route::post('/product', ProductController::class . '@store')->name('product.stor
 Route::delete('/product/{product}', ProductController::class . '@destroy')->name('product.destroy');
 
 // rate routes
-Route::post('/rate', RateController::class . '@store')->name('rate.store');
+Route::post('/rate', RatingController::class . '@store')->name('rate.store');

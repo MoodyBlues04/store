@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfileStoreRequest extends FormRequest
+class RatingStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +24,16 @@ class ProfileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string', 'max:20'],
-            'introduction' => ['required', 'string', 'max:500'],
-            'image' => ['image', 'mimes:jpg,jpeg,png', 'nullable']
+            'user' => 'required',
+            'value' => ['required', 'int']
         ];
+    }
+
+    /**
+     * @throws ModelNotFoundException
+     */
+    public function getUserModel(): User
+    {
+        return User::findOrFail($this->user);
     }
 }
