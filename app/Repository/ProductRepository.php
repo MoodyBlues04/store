@@ -16,7 +16,7 @@ class ProductRepository
 
     public function getLatestPaginated(): Paginator
     {
-        return Product::latest()->simplePaginate(4);
+        return Product::with('user')->latest()->simplePaginate(10);
     }
 
     /**

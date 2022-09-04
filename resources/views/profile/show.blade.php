@@ -35,8 +35,9 @@
                         <h4>{{ $user->profile->introduction ?? "Enter introduction here" }}</h4>
                     </div>
 
-                    <div>
-                        <p>{{ (string)count($user->products) . ' products'}}</p>
+                    <div class="d-flex justify-content-between" style="width: 75px">
+                        <div class="mr-1">{{ $productsCount }}</div>
+                        <div>products</div>
                     </div>
                     
                     <div class="d-flex flex-column">

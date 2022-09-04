@@ -11,7 +11,7 @@ use App\Models\Rating;
 use App\Models\User;
 use App\Repository\ProfileRepository;
 use App\Repository\RatingRepository;
-
+use Illuminate\Support\Facades\Cache;
 
 class ProfileController extends Controller
 {
@@ -32,17 +32,25 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        $productsCount = Cache::remember(
+            'count.product' . (string)$user->id,
+            now()->addSeconds(30),
+            function () use ($user) {
+                return $user->products->count();
+            }
+        );
+
         $rawAvgValue = $this->ratingRepository->getAvgValueByProfileId($user->profile->id);
         $avgValue = $rawAvgValue ?? 'N/A';
 
         if (auth()->user() === null) {
-            return view('profile.show', compact('user', 'avgValue'));
+            return view('profile.show', compact('user', 'avgValue', 'productsCount'));
         }
 
         $rating = $this->ratingRepository->getRatingByUserAndProfile(auth()->user()->id, $user->profile->id);
         $value = $rating->value ?? false; 
 
-        return view('profile.show', compact('user', 'value', 'avgValue'));
+        return view('profile.show', compact('user', 'value', 'avgValue', 'productsCount'));
     }
 
     /**
