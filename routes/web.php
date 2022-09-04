@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RatingController;
+use App\Mail\NewUserWelcome;
 
 /*
 |--------------------------------------------------------------------------
