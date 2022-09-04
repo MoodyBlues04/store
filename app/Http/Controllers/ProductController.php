@@ -89,7 +89,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = $this->productRepository->getDescOrdered();
+        $products = $this->productRepository->getLatestPaginated();
         return view('product.index', compact('products'));
     }
 

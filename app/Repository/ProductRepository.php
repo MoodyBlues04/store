@@ -6,17 +6,17 @@ namespace App\Repository;
 
 use App\Helpers\ImageHelper;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\Paginator;
 use Intervention\Image\Facades\Image;
 
 class ProductRepository
 {
     public const STORAGE_PATH = __DIR__ . '/../../storage/app/public/';
 
-    public function getDescOrdered(): Collection
+    public function getLatestPaginated(): Paginator
     {
-        return Product::orderBy('created_at', 'DESC')->get();
+        return Product::latest()->simplePaginate(4);
     }
 
     /**
