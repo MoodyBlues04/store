@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Mail\NewUserWelcome;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -61,7 +62,8 @@ class User extends Authenticatable
         static::created(function (User $user) {
             $user->profile()->create();
 
-            Mail::to();
+            // Doesn't work without VPN
+            // Mail::to($user->email)->send(new NewUserWelcome($user));
         });
 
         static::deleting(function (User $user) {
