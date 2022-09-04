@@ -37,7 +37,7 @@ class RatingController extends Controller
         
         if ($value === -1) {
             $avgValue = $this->ratingRepository->getAvgValueByProfileId($profileId);
-            return [false, $avgValue];
+            return [false, $avgValue ?? 'N/A'];
         }
         
 

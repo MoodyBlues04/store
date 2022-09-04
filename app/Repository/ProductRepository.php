@@ -18,7 +18,7 @@ class ProductRepository
     {
         return Product::orderBy('created_at', 'DESC')->get();
     }
-    
+
     /**
      * Stores product photos
      * @param UploadedFile[] $photos

@@ -23,8 +23,9 @@
                                 avg-value="{{ $avgValue }}"
                             ></rate-button>
                         @else
-                            <div class="pt-3">
-                                <p style="font-size: 120%">{{ $avgValue }}</p>
+                            <div class="d-flex pt-1 justify-content-between align-items-center" style="width: 70px">
+                                <div style="font-size: 105%">stars</div>
+                                <div style="font-size: 120%">{{ $avgValue }}</div>
                             </div>
                         @endif
                         
@@ -35,7 +36,7 @@
                     </div>
 
                     <div>
-                        <p>{{ (string)count($user->products) . ' товаров'}}</p>
+                        <p>{{ (string)count($user->products) . ' products'}}</p>
                     </div>
                     
                     <div class="d-flex flex-column">

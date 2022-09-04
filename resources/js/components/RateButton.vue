@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="d-flex flex-column align-items-center">
         <div>
             <button class="btn btn-primary" @click="rateUser(1)" v-text="buttonText1"></button>
             <button class="btn btn-primary" @click="rateUser(2)" v-text="buttonText2"></button>
@@ -9,7 +9,10 @@
             <button class="btn btn-secondary" @click="rateUser(-1)">X</button>
         </div>
 
-        <p class="w-100 text-center pt-2" v-text="avgFunc"></p>
+        <div class="d-flex align-items-center justify-content-between pt-2" style="width: 70px">
+            <div>stars</div>
+            <div class="text-center" v-text="avgFunc"></div>
+        </div>
     </div>
 </template>
 

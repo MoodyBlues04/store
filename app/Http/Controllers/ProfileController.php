@@ -32,7 +32,8 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        $avgValue = $this->ratingRepository->getAvgValueByProfileId($user->profile->id);
+        $rawAvgValue = $this->ratingRepository->getAvgValueByProfileId($user->profile->id);
+        $avgValue = $rawAvgValue ?? 'N/A';
 
         if (auth()->user() === null) {
             return view('profile.show', compact('user', 'avgValue'));
