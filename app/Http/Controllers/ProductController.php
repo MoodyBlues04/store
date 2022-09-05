@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CustomResponse;
+use App\Exceptions\InternalServerException;
+use App\Exceptions\NotFoundModelException;
 use App\Helpers\ImageHelper;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
@@ -13,6 +16,7 @@ use App\Models\User;
 use App\Repository\ProductRepository;
 use Illuminate\Http\Client\Request;
 use Intervention\Image\Facades\Image;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
@@ -64,14 +68,22 @@ class ProductController extends Controller
 
 
         if (!$this->productRepository->save($product)) {
-            throw new \Exception("Product not saved");
+            throw new NotFoundModelException(
+                "Product not saved",
+                Response::HTTP_NOT_FOUND,
+                CustomResponse::NOT_FOUND_MODEL_ERROR
+            );
         }
 
         if ($request->getPhotos() !== null) {
             $this->productRepository->removePhotosById($product->id);
             
             if (!$this->productRepository->storePhotosById($product->id, $request->getPhotos())) {
-                throw new \Exception("Product's photos not saved");
+                throw new InternalServerException(
+                    "Product's photos not saved",
+                    Response::HTTP_INTERNAL_SERVER_ERROR,
+                    CustomResponse::INTERNAL_SERVER_ERROR
+                );
             }          
         }  
 
@@ -111,7 +123,11 @@ class ProductController extends Controller
         ]);
 
         if (!$this->productRepository->storePhotosById($product->id, $request->getPhotos())) {
-            throw new \Exception("Product's photos not saved");
+            throw new InternalServerException(
+                "Product's photos not saved",
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                CustomResponse::INTERNAL_SERVER_ERROR
+            );
         }
 
         return redirect('/profile/' . auth()->user()->id);
@@ -127,7 +143,11 @@ class ProductController extends Controller
         $this->authorize('delete', $product);
         
         if (!$this->productRepository->delete($product)) {
-            throw new \Exception("Product not deleted");
+            throw new InternalServerException(
+                "Product not deleted",
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                CustomResponse::INTERNAL_SERVER_ERROR
+            );
         }
 
         return redirect('/profile/' . auth()->user()->id);    

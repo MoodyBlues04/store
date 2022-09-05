@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CustomResponse;
+use App\Exceptions\InternalServerException;
 use App\Http\Requests\RatingStoreRequest;
 use App\Models\Rating;
 use App\Models\User;
 use App\Repository\RatingRepository;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class RatingController extends Controller
 {
@@ -49,7 +52,11 @@ class RatingController extends Controller
         $rating->value = $value;
         
         if (!$this->ratingRepository->save($rating)) {
-            throw new \Exception("Rating not saved");
+            throw new InternalServerException(
+                "Rating not saved",
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                CustomResponse::INTERNAL_SERVER_ERROR
+            );
         }
 
         $avgValue = $this->ratingRepository->getAvgValueByProfileId($profileId);

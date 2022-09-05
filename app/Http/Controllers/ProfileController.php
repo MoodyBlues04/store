@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CustomResponse;
+use App\Exceptions\InternalServerException;
 use App\Helpers\ImageHelper;
 use App\Http\Requests\ProfileStoreRequest;
 use App\Http\Requests\ProfileUpdateRequest;
@@ -12,6 +14,7 @@ use App\Models\User;
 use App\Repository\ProfileRepository;
 use App\Repository\RatingRepository;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends Controller
 {
@@ -82,7 +85,11 @@ class ProfileController extends Controller
         $profile->image = $imagePath;
 
         if (!$this->profileRepository->save($profile)) {
-            throw new \Exception("Profile not saved");
+            throw new InternalServerException(
+                "Profile not saved",
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                CustomResponse::INTERNAL_SERVER_ERROR
+            );
         }
 
         return redirect("/profile/{$user->id}");
@@ -94,7 +101,7 @@ class ProfileController extends Controller
     public function store(ProfileStoreRequest $request)
     {
         $imagePath = null;
-        if (request('image') !== null) {
+        if ($request->getImage() !== null) {
             $imagePath = ImageHelper::storeProfileImage($request->getImage());
         }
         
