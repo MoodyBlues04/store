@@ -22,6 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string $created_at
  * @property string $updated_at
+ * @property string $deleted_at
  */
 class User extends Authenticatable
 {

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property    int $value
  * @property string $created_at
  * @property string $updated_at
+ * @property string $deleted_at
  */
 class Rating extends Model
 {

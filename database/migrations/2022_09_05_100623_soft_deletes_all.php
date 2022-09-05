@@ -28,6 +28,10 @@ return new class extends Migration
         Schema::table('ratings', function (Blueprint $table) {
             $table->softDeletes();
         });
+
+        Schema::table('product_photos', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -50,6 +54,10 @@ return new class extends Migration
         });
 
         Schema::table('ratings', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
+        Schema::table('product_photos', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }

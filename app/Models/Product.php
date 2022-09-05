@@ -23,6 +23,7 @@ use Intervention\Image\Facades\Image;
  * @property string $image
  * @property string $created_at
  * @property string $updated_at
+ * @property string $deleted_at
  */
 class Product extends Model
 {
