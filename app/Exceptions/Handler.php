@@ -47,4 +47,25 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * Report and log an exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    public function report(\Throwable $exception)
+    {
+        if (in_array(get_class($exception), $this->customExceptions)) {
+            $exception->report();
+        }
+        parent::report($exception);
+    }
+
+    /**
+     * @var string[] $customExceptions
+     */
+    protected $customExceptions = [
+        \App\Exceptions\NotFoundModelException::class,
+    ];
 }

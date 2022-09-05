@@ -48,7 +48,6 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, Product $product)
     {
         $this->authorize('update', $product);
-        dd($request->getPhotos());
 
         $imagePath = $product->image;
         if ($request->getImage() !== null) {
@@ -69,7 +68,7 @@ class ProductController extends Controller
         }
 
         if ($request->getPhotos() !== null) {
-            $product->removePhotos();
+            $this->productRepository->removePhotosById($product->id);
             
             if (!$this->productRepository->storePhotosById($product->id, $request->getPhotos())) {
                 throw new \Exception("Product's photos not saved");
