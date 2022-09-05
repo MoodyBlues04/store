@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Repository\ProductRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Intervention\Image\Facades\Image;
 
 /**
@@ -27,7 +28,7 @@ use Intervention\Image\Facades\Image;
  */
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
