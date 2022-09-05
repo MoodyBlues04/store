@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class ProductPhoto extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Prunable;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +31,11 @@ class ProductPhoto extends Model
     protected $fillable = [
         'path',
     ];
+
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subWeek());
+    }
 
     /**
      * Defines dependencies

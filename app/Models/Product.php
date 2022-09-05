@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Repository\ProductRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Intervention\Image\Facades\Image;
 
@@ -28,7 +29,7 @@ use Intervention\Image\Facades\Image;
  */
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Prunable;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +43,11 @@ class Product extends Model
         'description',
         'characteristics',
     ];
+
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subWeek());
+    }
 
     /**
      * Defines dependencies

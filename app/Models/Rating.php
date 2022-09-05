@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Rating extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Prunable;
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +34,11 @@ class Rating extends Model
         'profile_id',
         'value',
     ];
+
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subWeek());
+    }
 
     /**
      * Defines dependencies

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Mail\NewUserWelcome;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,7 +28,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Prunable;
 
     const ADMIN = 1;
 
@@ -41,6 +42,11 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subWeek());
+    }
 
     /**
      * The attributes that should be hidden for serialization.

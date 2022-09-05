@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Profile extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Prunable;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +36,11 @@ class Profile extends Model
         'introduction',
         'image',
     ];
+
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subWeek());
+    }
 
     public static function booted()
     {
