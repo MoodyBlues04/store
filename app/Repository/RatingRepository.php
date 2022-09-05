@@ -28,4 +28,14 @@ class RatingRepository
 
         return $rating;
     }
+
+    public function save(Rating $rating): Rating|bool
+    {
+        return $rating->save() ? $rating : false;
+    }
+
+    public function delete(Rating $rating): ?bool
+    {
+        return $rating->delete();
+    }
 }

@@ -28,13 +28,13 @@ class RatingController extends Controller
     public function store(RatingStoreRequest $request)
     {
         $userId = auth()->user()->id;
-        $value = $request['value'];
+        $value = $request->value;
         $user = $request->getUserModel();
         $profileId = $user->profile->id;
 
         $rating = $this->ratingRepository->getRatingByUserAndProfile($userId, $profileId);
         if (isset($rating->value)) {
-            $rating->delete();
+            $this->ratingRepository->delete($rating);
         }
         
         if ($value === -1) {
@@ -48,7 +48,7 @@ class RatingController extends Controller
         $rating->profile_id = $profileId;
         $rating->value = $value;
         
-        if (!$rating->save()) {
+        if (!$this->ratingRepository->save($rating)) {
             throw new \Exception("Rating not saved");
         }
 

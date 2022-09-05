@@ -71,17 +71,17 @@ class ProfileController extends Controller
         $this->authorize('update', $user->profile);
 
         $imagePath = $user->profile->image;
-        if (request('image') !== null) {
-            $imagePath = ImageHelper::storeProfileImage(request('image'));
+        if ($request->getImage() !== null) {
+            $imagePath = ImageHelper::storeProfileImage($request->getImage());
             $this->profileRepository->removeImageById($user->profile->id);
         }
 
         $profile = auth()->user()->profile;
-        $profile->username = $request['username'] ?? $profile->username;
-        $profile->introduction = $request['introduction'] ?? $profile->introduction;
+        $profile->username = $request->username ?? $profile->username;
+        $profile->introduction = $request->introduction ?? $profile->introduction;
         $profile->image = $imagePath;
 
-        if (!$profile->save()) {
+        if (!$this->profileRepository->save($profile)) {
             throw new \Exception("Profile not saved");
         }
 
@@ -95,12 +95,12 @@ class ProfileController extends Controller
     {
         $imagePath = null;
         if (request('image') !== null) {
-            $imagePath = ImageHelper::storeProfileImage(request('image'));
+            $imagePath = ImageHelper::storeProfileImage($request->getImage());
         }
         
         auth()->user()->profile()->create([
-            'username' => $request['username'],
-            'introduction' => $request['introduction'],
+            'username' => $request->username,
+            'introduction' => $request->introduction,
             'image' => $imagePath,
         ]);        
 

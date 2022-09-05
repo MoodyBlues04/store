@@ -26,4 +26,14 @@ class ProfileRepository
             unlink($path);
         }
     }
+
+    public function save(Profile $profile): Profile|bool
+    {
+        return $profile->save() ? $profile : false;
+    }
+
+    public function delete(Profile $profile): ?bool
+    {
+        return $profile->delete();
+    }
 }
