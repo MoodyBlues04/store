@@ -78,4 +78,14 @@ class ProductRepository
             unlink($path);
         }
     }
+
+    public function save(Product $product): Product|bool
+    {
+        return $product->save() ? $product : false;
+    }
+
+    public function delete(Product $product): ?bool
+    {
+        return $product->delete();
+    }
 }

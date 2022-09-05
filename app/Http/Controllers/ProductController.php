@@ -48,29 +48,30 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, Product $product)
     {
         $this->authorize('update', $product);
+        dd($request->getPhotos());
 
         $imagePath = $product->image;
-        if (request('image') !== null) {
+        if ($request->getImage() !== null) {
             $this->productRepository->removeImageById($product->id);
-            $imagePath = ImageHelper::storeProductImage(request('image'));
+            $imagePath = ImageHelper::storeProductImage($request->getImage());
         }
 
-        $product->name = $request['name'] ?? $product->name;
-        $product->price = $request['price'] ?? $product->price;
-        $product->amount = $request['amount'] ?? $product->amount;
+        $product->name = $request->name ?? $product->name;
+        $product->price = $request->price ?? $product->price;
+        $product->amount = $request->amount ?? $product->amount;
         $product->image =  $imagePath;
-        $product->description = $request['description'] ?? null;
-        $product->characteristics = $request['characteristics'] ?? null;
+        $product->description = $request->description ?? null;
+        $product->characteristics = $request->characteristics ?? null;
 
 
-        if (!$product->save()) {
+        if (!$this->productRepository->save($product)) {
             throw new \Exception("Product not saved");
         }
 
-        if (request()->photos !== null) {
+        if ($request->getPhotos() !== null) {
             $product->removePhotos();
             
-            if (!$this->productRepository->storePhotosById($product->id, request()->photos)) {
+            if (!$this->productRepository->storePhotosById($product->id, $request->getPhotos())) {
                 throw new \Exception("Product's photos not saved");
             }          
         }  
@@ -102,15 +103,15 @@ class ProductController extends Controller
     public function store(ProductStoreRequest $request)
     {
         $product = auth()->user()->products()->create([
-            'name' => $request['name'],
-            'price' => $request['price'],
-            'amount' => $request['amount'],
-            'description' => $request['description'] ?? null,
-            'characteristics' => $request['characteristics'] ?? null,
-            'image' => ImageHelper::storeProductImage(request('image'))
+            'name' => $request->name,
+            'price' => $request->price,
+            'amount' => $request->amount,
+            'description' => $request->description ?? null,
+            'characteristics' => $request->characteristics ?? null,
+            'image' => ImageHelper::storeProductImage($request->getImage())
         ]);
 
-        if (!$this->productRepository->storePhotosById($product->id, request()->photos)) {
+        if (!$this->productRepository->storePhotosById($product->id, $request->getPhotos())) {
             throw new \Exception("Product's photos not saved");
         }
 
@@ -126,7 +127,7 @@ class ProductController extends Controller
     {
         $this->authorize('delete', $product);
         
-        if (!$product->delete()) {
+        if (!$this->productRepository->delete($product)) {
             throw new \Exception("Product not deleted");
         }
 

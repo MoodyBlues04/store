@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
 class ProductStoreRequest extends FormRequest
 {
@@ -16,6 +17,18 @@ class ProductStoreRequest extends FormRequest
         return true;
     }
 
+    public function getImage(): UploadedFile
+    {
+        return $this->image;
+    }
+
+    /**
+     * @return array<int,UploadedFile>
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
     /**
      * Get the validation rules that apply to the request.
      * @return array<string, mixed>

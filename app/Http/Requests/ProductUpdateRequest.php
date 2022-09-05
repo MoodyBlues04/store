@@ -7,6 +7,7 @@ namespace App\Http\Requests;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
 class ProductUpdateRequest extends FormRequest
 {
@@ -16,6 +17,19 @@ class ProductUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function getImage(): ?UploadedFile
+    {
+        return $this->image ?? null;
+    }
+
+    /**
+     * @return ?array<int,UploadedFile>
+     */
+    public function getPhotos()
+    {
+        return $this->photos ?? null;
     }
 
     /**
