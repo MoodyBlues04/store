@@ -1,11 +1,11 @@
 <template>
     <div class="d-flex flex-column align-items-center">
         <div>
-            <button class="btn btn-primary" @click="rateUser(1)" v-text="buttonText1"></button>
-            <button class="btn btn-primary" @click="rateUser(2)" v-text="buttonText2"></button>
-            <button class="btn btn-primary" @click="rateUser(3)" v-text="buttonText3"></button>
-            <button class="btn btn-primary" @click="rateUser(4)" v-text="buttonText4"></button>
-            <button class="btn btn-primary" @click="rateUser(5)" v-text="buttonText5"></button>
+            <button class="btn btn-primary" @click="rateUser(1)" v-text="buttonText(1)"></button>
+            <button class="btn btn-primary" @click="rateUser(2)" v-text="buttonText(2)"></button>
+            <button class="btn btn-primary" @click="rateUser(3)" v-text="buttonText(3)"></button>
+            <button class="btn btn-primary" @click="rateUser(4)" v-text="buttonText(4)"></button>
+            <button class="btn btn-primary" @click="rateUser(5)" v-text="buttonText(5)"></button>
             <button class="btn btn-secondary" @click="rateUser(-1)">X</button>
         </div>
 
@@ -58,43 +58,13 @@ import axios from 'axios';
             }
         },
 
-        // very bad in JS :(
         computed: {
-
             avgFunc() {
                 return this.avg;
             },
 
-            buttonText1() {
-                if (!this.status || this.status < 1) {
-                    return '0';
-                }
-                return '1';
-            },
-
-            buttonText2() {
-                if (!this.status || this.status < 2) {
-                    return '0';
-                }
-                return '1';
-            },
-
-            buttonText3() {
-                if (!this.status || this.status < 3) {
-                    return '0';
-                }
-                return '1';
-            },
-
-            buttonText4() {
-                if (!this.status || this.status < 4) {
-                    return '0';
-                }
-                return '1';
-            },
-
-            buttonText5() {
-                if (!this.status || this.status < 5) {
+            buttonText(num) {
+                if (!this.status || this.status < num) {
                     return '0';
                 }
                 return '1';
